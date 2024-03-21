@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>User Details View Page</title>
+<style>
+        body {
+            align-items: center;
+            justify-content: center;
+            margin-top: 20%;
+            margin-left: 42%;
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+ <div>
+	<button onclick="goBack()"><span class="symbol" onclick="toggleOptions(this)">&#8592;</span> Back</button>
+</div>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+<div>
+
+<p th:if="${imageBase64 != null}">
+            
+            <img th:src="'data:image/png;base64,' + ${imageBase64}" alt="Employee Image" width="200" style="border: 0.1px solid white; border-radius: 50%;"/>
+      
+       <form th:action=@{/updateEmployeeImage/{id}(id=${employee.id})} method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Update Image</button>
+</form>
+        </p>
+
+        <p><strong>ID:</strong> [[${employee.id}]]</p>
+        <p><strong>Name:</strong> [[${employee.fullname}]]</p>
+        <p><strong>Role:</strong> [[${employee.role}]]</p>
+        <p><strong>Email:</strong> [[${employee.email}]]</p>
+        <p><strong>PhoneNumber:</strong> [[${employee.phoneNumber}]]</p>
+
+</div>
+
+<button class="but2">
+        <span sec:authorize="isAuthenticated">
+        <a th:href="@{/logout}">
+         Logout
+        </a>
+        </span>
+        </button>
+        
+</body>
+</html>

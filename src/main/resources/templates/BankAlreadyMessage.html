@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Bank Details</title>
+    <!-- Include any CSS files or stylesheets if needed -->
+    <link rel="stylesheet" href="path/to/your/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Display message1 if present -->
+        <div th:if="${message1}" class="alert alert-danger" role="alert">
+            <p th:text="${message1}"></p>
+        </div>
+
+        <h1>Employee Bank Account Details</h1>
+        <!-- Display bank account details here -->
+        <p>Account Number: <span th:text="${bankAccountDetails1.accountNumber}"></span></p>
+        <p>Bank Name: <span th:text="${bankAccountDetails1.bankName}"></span></p>
+        <p>Branch Name: <span th:text="${bankAccountDetails1.branchName}"></span></p>
+        <!-- Add more bank account details here -->
+
+        <!-- Include any additional styling or content as needed -->
+    </div>
+     <a th:href="@{/showFormForUpdateBankDetails/{id}(id=${bankAccountDetails1.id})}" class="btn btn-primary update-option">Update</a>
+       
+</body>
+</html>
+
+

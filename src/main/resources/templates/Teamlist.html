@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<table border>
+		<thead>
+			<tr>
+				<th>Team_Id</th>
+				<th>Team_Name</th>
+				
+				<th>Employee_Name</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="team:${allTeams}">
+				<td th:text="${team.id}"></td>
+				<td th:text="${team.teamName}"></td>
+				<td>
+					<ul>
+						<li th:each="user:${team.user}">
+                        <Span th:text="${user.fullname}"></span>
+                        
+                        </li>
+					</ul>
+
+
+				</td>
+
+			</tr>
+		</tbody>
+		</table>
+</body>
+</html>

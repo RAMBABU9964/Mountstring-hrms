@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #8e8e8e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #45b6fe;
+            
+           
+            
+        }
+
+        .header h1 {
+           margin-left: 40%;
+           text-decoration: underline;
+        }
+        
+        .but1 {
+            margin-left: 90%;
+            margin-top: 5px;
+            border: 1px solid black; 
+            height: 30px;
+            width: 125px;
+           border-radius: 5px;
+           text-align: center;
+           
+            
+        }
+        
+        .header a {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            
+        }
+        
+        .but2{
+        
+            margin-left: 92%;
+            
+            height: 25px;
+            width: 70px;
+            border-radius: 5px;
+            
+            background-color: white;
+        }
+        .but3{
+        
+            margin-top:2%;
+            margin-left:1%;
+            height: 50px;
+            width: 150px;
+            border-radius: 5px;
+            
+            background-color: white;
+        }
+
+        .container {
+           
+           
+            margin-left: 13%;
+            margin-top: 7px;
+           
+        }
+
+        h2 {
+            color: #45b6fe;
+        }
+        
+        table {
+	width: 780px;
+	
+	font-size: 16px;
+	text-align: center;
+	background-color:white;
+    color:rgb(128, 64, 28, 64, 64);
+    }
+   .table-striped tbody tr:nth-of-type(odd) {
+    background-color: red ;
+}
+    
+
+
+        /* Add more styles and components for your dashboard here */
+    </style>
+</head>
+<body>
+
+<div class="header">
+   
+	<button onclick="goBack()"><span class="symbol" onclick="toggleOptions(this)">&#8592;</span> Back</button>
+   
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+       
+        <button class="but3"><a href="ListPresent">Today Employees Attendance</a></button>
+        <button class="but3"><a href="Teams">Teams</a></button>
+        
+       
+    
+        <h1>Admin Dashboard</h1>
+        
+        
+         <button class="but2">
+        <span sec:authorize="isAuthenticated">
+        <a th:href="@{/logout}">
+         Logout
+        </a>
+        </span>
+        </button>
+        
+        <button class="but1"><a href="registration">NEW REGISTER</a></button>
+        <button class="but1"><a href="myprofile">My-Profile</a></button>
+        
+ </div>
+    
+   
+    
+    <div class="container">
+    
+    
+    
+     <table class= "table table-striped">
+		<thead>
+			<tr>
+				<th>EMP_ID</th>
+				<th>FullName</th>
+				<th>Role</th>
+				<th>email</th>
+				<th>PhoneNumber</th>
+				<th>Action</th>
+				
+			</tr>
+		 </thead>
+		 <tbody>
+			<tr th:each="emp:${list}">
+			
+				<td th:text="${emp.id}"></td>
+				<td th:text="${emp.fullname}"></td>
+				<td th:text="${emp.role}"></td>
+				<td th:text="${emp.email}"></td>
+				<td th:text="${emp.phoneNumber}"></td>
+				
+				<td class="action-cell">
+    <span class="symbol" onclick="toggleOptions(this)">&#x270E;</span> <!-- This symbol represents a wrench icon -->
+    <div class="options" style="display: none;">
+        <a th:href="@{/showFormForUpdateAdmin/{id}(id=${emp.id})}" class="btn btn-primary update-option">Update</a>
+        <a th:href="@{/deleteEmployee/{id}(id=${emp.id})}" class="btn btn-primary delete-option">Delete</a>
+        <a th:href="@{/viewEmployee/{id}(id=${emp.id})}" class="btn btn-primary view-option">View</a>
+        <a th:href="@{/viewAttendance/{id}(id=${emp.id})}" class="btn btn-primary update-option">Attendance</a>
+        <a th:href="@{/markAttendance/{id}(id=${emp.id})}" class="btn btn-primary update-option">Mark Attendance</a>
+        <a th:href="@{/bankAccount/{id}(id=${emp.id})}" class="btn btn-primary update-option">Bank Account Details</a>
+    
+    </div>
+</td>
+				
+		      </tr>
+		  </tbody>
+    </table>
+       
+
+    </div>
+    
+    
+    
+    <script>
+    function toggleOptions(symbol) {
+        var options = symbol.parentNode.querySelector('.options');
+        options.style.display = options.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+    
+</body>
+</html>

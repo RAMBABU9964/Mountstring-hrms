@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Teams</title>
+</head>
+<body>
+    <form action="/createTeam" method="post">
+        <label>Team Name:</label>
+        <input type="text" name="teamName" /> <br/>
+
+       <div th:each="list:${user}">
+			<input type="checkbox" th:name="user" th:value="${list.id}"/>
+			<label th:text="${list.fullname}"></label><br>
+			<label th:text="${list.role}"></label>
+		</div>
+
+        <input type="submit" value="Add Team" />
+    </form>
+</body>
+</html>

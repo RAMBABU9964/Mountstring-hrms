@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "ogging.level.org.hibernate.type",
+  "type": "java.lang.String",
+  "description": "A description for 'ogging.level.org.hibernate.type'"
+}]}
