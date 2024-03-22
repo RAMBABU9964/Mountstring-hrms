@@ -35,24 +35,30 @@ public class AttendanceService {
 	JavaMailSender javaMailSender;
 
 	public Attendance markInTime(User user) {
-	    LocalDate currentDate = LocalDate.now();
-	    LocalTime currentTime = LocalTime.now();
-	    LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase(); //Assuming fixed office entry time is 9:30 AM
+		LocalDate currentDate = LocalDate.now();
+		LocalTime currentTime = LocalTime.now();
+		LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
 
-	    Attendance attendance = new Attendance();
-	    attendance.setDate(currentDate);
-	    attendance.setInTime(currentTime);
-	    attendance.setUser(user);
-	    attendance.setFixedTime(fixedTime);
+		// Check if fixed time is retrieved from the database
+		if (fixedTime == null) {
+			// Set a default fixed time, assuming it's 9:30 AM
+			fixedTime = LocalTime.of(9, 30); // Default fixed time
+		}
 
-	    // Calculate late minutes
-	    long lateMinutes = 0;
-	    if (currentTime.isAfter(fixedTime)) {
-	        lateMinutes = Duration.between(fixedTime, currentTime).toMinutes();
-	    }
-	    attendance.setLateMinutes(lateMinutes);
+		Attendance attendance = new Attendance();
+		attendance.setDate(currentDate);
+		attendance.setInTime(currentTime);
+		attendance.setUser(user);
+		attendance.setFixedTime(fixedTime);
 
-	    return attendanceRepo.save(attendance);
+		// Calculate late minutes
+		long lateMinutes = 0;
+		if (currentTime.isAfter(fixedTime)) {
+			lateMinutes = Duration.between(fixedTime, currentTime).toMinutes();
+		}
+		attendance.setLateMinutes(lateMinutes);
+
+		return attendanceRepo.save(attendance);
 	}
 
 

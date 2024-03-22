@@ -41,48 +41,56 @@ public class AttendanceController {
 
 	@GetMapping("/markIn/{id}")
 	public String markInTime(@PathVariable long id, Model model) {
-	    // Fetch the employee by ID
-	    User user = userService.getEmployeeById(id);
-	    
-	    // Get the fixed time for attendance marking
-	    LocalTime fixedTime = LocalTime.of(9, 30);
-	    
-	    // Check if the current time is after the fixed time
-	    if (LocalTime.now().isAfter(fixedTime)) {
-	        // Calculate the minutes late
-	        long minutesLate = Duration.between(fixedTime, LocalTime.now()).toMinutes();
-	        model.addAttribute("minutesLate", minutesLate);
-	    }
-	    
-	    // Check if the employee has already marked in time
-	    List<Attendance> inTimeRecords = attendanceRepo.findByUserIdAndDate(id, LocalDate.now());
-	    if (!inTimeRecords.isEmpty()) {
-	        // Handle the case where there are multiple in-time records for the same user and date
-	        // For demonstration, let's consider the latest record
-	        Attendance latestAttendance = inTimeRecords.get(inTimeRecords.size() - 1);
-	        
-	        // Add logic here based on your requirements
-	        
-	        // For now, let's just add a message to the model
-	        model.addAttribute("message", "You have already marked today's in-time attendance.");
-	        return "redirect:/employee-page";
-	    }
-	    
-	    // Mark in time attendance
-	    attendanceService.markInTime(user);
-	    
-	    // Send email notification
-	    if (user.getEmail() != null) {
-	        try {
-	            attendanceService.sendEmail(user.getEmail(), "In Time Attendance Marked Successfully");
-	        } catch (UnsupportedEncodingException | MessagingException e) {
-	            e.printStackTrace();
-	        }
-	    }else {
-	    	return "redirect:/employee-page";
-	    }
+		// Fetch the employee by ID
+		User user = userService.getEmployeeById(id);
 
-	    return "redirect:/employee-page";
+		// Get the fixed time for attendance marking
+		LocalTime fixedTime = LocalTime.of(9, 30);
+
+		// Check if the current time is after the fixed time
+		if (LocalTime.now().isAfter(fixedTime)) {
+			// Calculate the minutes late
+			long minutesLate = Duration.between(fixedTime, LocalTime.now()).toMinutes();
+			model.addAttribute("minutesLate", minutesLate);
+		}
+
+		try {
+			// Check if the employee has already marked in time
+			List<Attendance> inTimeRecords = attendanceRepo.findByUserIdAndDate(id, LocalDate.now());
+
+			if (!inTimeRecords.isEmpty()) {
+				// Handle the case where there are multiple in-time records for the same user and date
+				// For demonstration, let's consider the latest record
+				Attendance latestAttendance = inTimeRecords.get(inTimeRecords.size() - 1);
+
+				// Add logic here based on your requirements
+
+				// For now, let's just add a message to the model
+				model.addAttribute("message", "You have already marked today's in-time attendance.");
+				return "redirect:/employee-page";
+			}
+
+			// Mark in time attendance
+			attendanceService.markInTime(user);
+
+			// Send email notification
+			if (user.getEmail() != null) {
+				try {
+					attendanceService.sendEmail(user.getEmail(), "In Time Attendance Marked Successfully");
+				} catch (UnsupportedEncodingException | MessagingException e) {
+					e.printStackTrace();
+				}
+			} else {
+				return "redirect:/employee-page";
+			}
+		} catch (Exception e) {
+			// Handle the exception (e.g., log it, return an error page)
+			e.printStackTrace(); // Logging the exception
+			model.addAttribute("error", "An error occurred while fetching attendance records.");
+			return "error-page"; // Or whatever error handling mechanism you have
+		}
+
+		return "redirect:/employee-page";
 	}
 
 

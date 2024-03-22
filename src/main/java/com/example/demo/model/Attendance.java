@@ -25,7 +25,7 @@ public class Attendance {
 	
 	private double totalHours; 
 	
-	private LocalTime fixedTime;
+	private LocalTime fixedTime = LocalTime.of(9, 30);
 	
 	private long lateMinutes;
 	
