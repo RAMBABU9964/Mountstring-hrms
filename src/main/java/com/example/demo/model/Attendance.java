@@ -24,6 +24,7 @@ public class Attendance {
 	private LocalTime fixedTime = LocalTime.of(9, 30);
 
 	private LocalTime fixedOutTime = LocalTime.of(18, 30);
+	
 	private long lateMinutes;
 
 	private double overtime;

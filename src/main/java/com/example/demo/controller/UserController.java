@@ -43,6 +43,12 @@ public class UserController {
 	AttendanceService attendanceService;
 
 //******************************************************************************************************	
+	@GetMapping("/")
+	public String back() {
+		return "login";
+		
+	}
+	
 	
 	@GetMapping("/registration")
 	public String getregisterpag() {
@@ -123,9 +129,11 @@ public class UserController {
 		User user = userService.findByEmail(principal.getName());
 		
 		 LocalTime presentFixedTime = attendanceService.getCurrentFixedTime();
+		 LocalTime presentFixedTime2 = attendanceService.getCurrentFixedOutTime();
 
 		    // Pass the present fixed time to the HTML template
 		 model.addAttribute("currentFixedTime", presentFixedTime);
+		 model.addAttribute("currentFixedTime1", presentFixedTime2);
 		
 		List<User> allDate=userService.fetchAllData();
 		model.addAttribute("user", userDetails);

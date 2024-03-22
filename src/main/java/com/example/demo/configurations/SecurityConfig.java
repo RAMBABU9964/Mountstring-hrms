@@ -41,6 +41,7 @@ public class SecurityConfig {
 				.hasAuthority("ADMIN").requestMatchers("/employee-page").hasAuthority("EMPLOYEE")
 				.requestMatchers("/pro-admin-page").hasAuthority("PRO-ADMIN")
 				.requestMatchers( "/css/**").permitAll()
+				.requestMatchers( "/").permitAll()
 				.requestMatchers("/forgot-password").permitAll()
 				.requestMatchers("/password-request").permitAll()
 				.requestMatchers("/password").permitAll()

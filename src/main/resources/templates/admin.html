@@ -49,7 +49,7 @@
             background-color: white;
             color: rgb(128, 64, 28, 64, 64);
             overflow-x: auto; /* To enable horizontal scrolling on smaller screens */
-            //width : 718px !important;
+            
 
         }
 
@@ -84,9 +84,10 @@
         </div>
         <div class="col-md-4">
         <form th:action="@{/updateFixedTime}" method="post">
-    <label for="fixedTime"></label>
+    <label for="fixedTime">in</label>
     <input type="time" id="fixedTime" name="fixedTime" placeholder="HH:mm" th:value="${currentFixedTime}">
-            <input type="time" id="fixedoutTime" name="fixedoutTime" placeholder="HH:mm" th:value="${currentFixedTime}">
+           <label for="fixedTime">out</label>
+            <input type="time" id="fixedoutTime" name="fixedoutTime" placeholder="HH:mm" th:value="${currentFixedTime1}">
     <button type="submit">Update Office Time</button>
 </form>
         </div>

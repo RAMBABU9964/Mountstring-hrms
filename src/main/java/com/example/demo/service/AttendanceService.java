@@ -38,11 +38,13 @@ public class AttendanceService {
 		LocalDate currentDate = LocalDate.now();
 		LocalTime currentTime = LocalTime.now();
 		LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
+		LocalTime fixedOutTime = attendanceRepo.getCurrentFixedOutTimeFromDatabase();
 
 		// Check if fixed time is retrieved from the database
-		if (fixedTime == null) {
+		if (fixedTime == null && fixedOutTime==null) {
 			// Set a default fixed time, assuming it's 9:30 AM
 			fixedTime = LocalTime.of(9, 30); // Default fixed time
+			fixedOutTime = LocalTime.of(18, 30); // Default fixed time
 		}
 
 		Attendance attendance = new Attendance();
@@ -50,7 +52,7 @@ public class AttendanceService {
 		attendance.setInTime(currentTime);
 		attendance.setUser(user);
 		attendance.setFixedTime(fixedTime);
-
+        attendance.setFixedOutTime(fixedOutTime);
 		// Calculate late minutes
 		long lateMinutes = 0;
 		if (currentTime.isAfter(fixedTime)) {
@@ -160,13 +162,14 @@ public class AttendanceService {
 	        attendanceRepo.save(attendance);
 	    }
 
-     public void updateFixedTime(LocalTime fixedTime) {
+     public void updateFixedTime(LocalTime fixedTime,LocalTime fixedTime1) {
          // Get all attendance records
          List<Attendance> allAttendances = attendanceRepo.findAll();
 
          // Update the fixed time for each attendance record
          for (Attendance attendance : allAttendances) {
              attendance.setFixedTime(fixedTime);
+             attendance.setFixedOutTime(fixedTime1);
          }
 
          // Save the updated attendance records to the database
@@ -178,5 +181,11 @@ public class AttendanceService {
          // Implement logic to fetch the current fixed time from the database or any other source
          return attendanceRepo.getCurrentFixedTimeFromDatabase(); // You need to implement this method in your repository
      }
+
+
+	public LocalTime getCurrentFixedOutTime() {
+		// TODO Auto-generated method stub
+		return attendanceRepo.getCurrentFixedOutTimeFromDatabase();
+	}
 
 }

@@ -45,6 +45,9 @@ Optional<Attendance> findTopByEmplyeeIdOrderByIdDesc(long userId);
 	
 	@Query("SELECT MAX(a.fixedTime) FROM Attendance a")
 	LocalTime getCurrentFixedTimeFromDatabase();
+	
+	@Query("SELECT MAX(a.fixedOutTime) FROM Attendance a")
+	LocalTime getCurrentFixedOutTimeFromDatabase();
 
 	 
 }

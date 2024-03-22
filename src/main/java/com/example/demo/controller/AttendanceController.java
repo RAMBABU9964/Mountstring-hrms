@@ -282,13 +282,14 @@ public class AttendanceController {
 	    }
 
 	    @PostMapping("/updateFixedTime")
-	    public String updateFixedTime(@RequestParam("fixedTime") String fixedTimeStr) {
+	    public String updateFixedTime(@RequestParam("fixedTime") String fixedTimeStr,@RequestParam("fixedoutTime") String fixedTimeStr1) {
 	        try {
 	            // Parse the input string to LocalTime
 	            LocalTime fixedTime = LocalTime.parse(fixedTimeStr);
-
+	            LocalTime fixedTime1 = LocalTime.parse(fixedTimeStr1);
+                
 	            // Update the fixed time using the service method
-	            attendanceService.updateFixedTime(fixedTime);
+	            attendanceService.updateFixedTime(fixedTime,fixedTime1);
 
 	            // Optionally, you can add a success message or handle errors
 	        } catch (DateTimeParseException e) {
