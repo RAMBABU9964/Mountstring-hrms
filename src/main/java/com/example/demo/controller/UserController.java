@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.User;
 import com.example.demo.repository.AttendanceRepo;
+import com.example.demo.service.AttendanceService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -38,7 +39,8 @@ public class UserController {
 	@Autowired
 	AttendanceRepo attendanceRepo;
 	
-	
+	@Autowired
+	AttendanceService attendanceService;
 
 //******************************************************************************************************	
 	
@@ -119,6 +121,11 @@ public class UserController {
 	public String adminPage(Model model, Principal principal) {
 		UserDetails userDetails= userDetailsService.loadUserByUsername(principal.getName());
 		User user = userService.findByEmail(principal.getName());
+		
+		 LocalTime presentFixedTime = attendanceService.getCurrentFixedTime();
+
+		    // Pass the present fixed time to the HTML template
+		 model.addAttribute("currentFixedTime", presentFixedTime);
 		
 		List<User> allDate=userService.fetchAllData();
 		model.addAttribute("user", userDetails);

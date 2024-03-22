@@ -40,5 +40,11 @@ Optional<Attendance> findTopByEmplyeeIdOrderByIdDesc(long userId);
 	LocalTime findInTimeByUserIdAndDate1(@Param("userId") long userId, @Param("todayDate") LocalDate todayDate);
 
 	Attendance findById(long id);
+	
+	Attendance findFirstByOrderById();
+	
+	@Query("SELECT MAX(a.fixedTime) FROM Attendance a")
+	LocalTime getCurrentFixedTimeFromDatabase();
 
+	 
 }

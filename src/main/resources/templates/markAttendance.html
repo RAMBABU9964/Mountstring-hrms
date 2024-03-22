@@ -8,6 +8,9 @@
 <body>
 <div class="container">
     <h2>Mark Attendance</h2>
+     <div th:if="${minutesLate}">
+        <p>You are <span th:text="${minutesLate}"></span> minutes late.</p>
+    </div>
     <form th:action="@{/markAttendance/{id}(id=${attendance.user.id})}" method="post" th:object="${attendance}">
         
         <div class="form-group">

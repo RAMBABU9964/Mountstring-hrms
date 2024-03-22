@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,33 +41,50 @@ public class AttendanceController {
 
 	@GetMapping("/markIn/{id}")
 	public String markInTime(@PathVariable long id, Model model) {
-		// Assuming you have a method to fetch the employee by ID
-		User user = userService.getEmployeeById(id);
-//		boolean canMarkAttendance = attendanceService.canMarkInTime(employee);
-		
-		java.util.List<Attendance> a = attendanceRepo.findByUserIdAndDate(id, LocalDate.now());
-		model.addAttribute("EmployeeAttendace", a);
-		System.out.println(a);
-		model.addAttribute("message", "Successfully Marked InTime Attendance");
-//		 if (canMarkAttendance) {
-		attendanceService.markInTime(user);
-		if(user.getEmail()!=null) {
-			
-			try {
-				attendanceService.sendEmail(user.getEmail(), "Attendance Update Message");
-				
-			} catch (UnsupportedEncodingException | MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-//		 }else {
-//	            // If the employee cannot mark attendance, display an error message
-//	            modelAndView.addObject("error", "Cannot mark attendance for today. Please mark out time for the previous day first.");
-//	        }
-		return "redirect:/employee-page";
+	    // Fetch the employee by ID
+	    User user = userService.getEmployeeById(id);
+	    
+	    // Get the fixed time for attendance marking
+	    LocalTime fixedTime = LocalTime.of(9, 30);
+	    
+	    // Check if the current time is after the fixed time
+	    if (LocalTime.now().isAfter(fixedTime)) {
+	        // Calculate the minutes late
+	        long minutesLate = Duration.between(fixedTime, LocalTime.now()).toMinutes();
+	        model.addAttribute("minutesLate", minutesLate);
+	    }
+	    
+	    // Check if the employee has already marked in time
+	    List<Attendance> inTimeRecords = attendanceRepo.findByUserIdAndDate(id, LocalDate.now());
+	    if (!inTimeRecords.isEmpty()) {
+	        // Handle the case where there are multiple in-time records for the same user and date
+	        // For demonstration, let's consider the latest record
+	        Attendance latestAttendance = inTimeRecords.get(inTimeRecords.size() - 1);
+	        
+	        // Add logic here based on your requirements
+	        
+	        // For now, let's just add a message to the model
+	        model.addAttribute("message", "You have already marked today's in-time attendance.");
+	        return "redirect:/employee-page";
+	    }
+	    
+	    // Mark in time attendance
+	    attendanceService.markInTime(user);
+	    
+	    // Send email notification
+	    if (user.getEmail() != null) {
+	        try {
+	            attendanceService.sendEmail(user.getEmail(), "In Time Attendance Marked Successfully");
+	        } catch (UnsupportedEncodingException | MessagingException e) {
+	            e.printStackTrace();
+	        }
+	    }else {
+	    	return "redirect:/employee-page";
+	    }
+
+	    return "redirect:/employee-page";
 	}
+
 
 	@GetMapping("/markOut/{id}")
 	public String markOutTime(@PathVariable long id ,Model model) {
@@ -187,14 +205,31 @@ public class AttendanceController {
 		
 	}
 	
-	 @GetMapping("/markAttendance/{id}")
-	    public String showMarkAttendanceForm(@PathVariable("id") Long id, Model model) {
-	        User user = userService.findById(id);
-	        Attendance attendance = new Attendance();
-	        attendance.setUser(user);
-	        model.addAttribute("attendance", attendance);
-	        return "markAttendance";
+	@GetMapping("/markAttendance/{id}")
+	public String showMarkAttendanceForm(@PathVariable("id") Long id, Model model) {
+	    User user = userService.findById(id);
+	    Attendance attendance = new Attendance();
+	    attendance.setUser(user);
+	    model.addAttribute("attendance", attendance);
+
+	    // Fixed time for attendance marking (9:30 AM)
+	    LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
+
+	    // Check if the current time is after the fixed time
+	    if (LocalTime.now().isAfter(fixedTime)) {
+	        // Calculate the difference between the current time and the fixed time
+	        Duration lateDuration = Duration.between(fixedTime, LocalTime.now());
+	        long minutesLate = lateDuration.toMinutes();
+	        
+	        // Set minutes late in the model attribute
+	        model.addAttribute("minutesLate", minutesLate);
 	    }
+
+	    return "markAttendance";
+	}
+
+	
+
 
 	    @PostMapping("/markAttendance/{id}")
 	    public String markAttendance(@PathVariable("id") Long id, Attendance attendance) {
@@ -238,6 +273,23 @@ public class AttendanceController {
 	    	
 	    }
 
-	
+	    @PostMapping("/updateFixedTime")
+	    public String updateFixedTime(@RequestParam("fixedTime") String fixedTimeStr) {
+	        try {
+	            // Parse the input string to LocalTime
+	            LocalTime fixedTime = LocalTime.parse(fixedTimeStr);
+
+	            // Update the fixed time using the service method
+	            attendanceService.updateFixedTime(fixedTime);
+
+	            // Optionally, you can add a success message or handle errors
+	        } catch (DateTimeParseException e) {
+	            // Handle parsing errors
+	        }
+
+	        return "redirect:/admin-page";
+	    }
+
+
 	
 }

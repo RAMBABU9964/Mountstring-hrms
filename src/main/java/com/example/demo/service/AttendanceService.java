@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Attendance;
 import com.example.demo.model.User;
 import com.example.demo.repository.AttendanceRepo;
+
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -33,16 +35,26 @@ public class AttendanceService {
 	JavaMailSender javaMailSender;
 
 	public Attendance markInTime(User user) {
-		LocalDate currentDate = LocalDate.now();
-		LocalTime currentTime = LocalTime.now();
+	    LocalDate currentDate = LocalDate.now();
+	    LocalTime currentTime = LocalTime.now();
+	    LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase(); //Assuming fixed office entry time is 9:30 AM
 
-		Attendance attendance = new Attendance();
-		attendance.setDate(currentDate);
-		attendance.setInTime(currentTime);
-		attendance.setUser(user);
+	    Attendance attendance = new Attendance();
+	    attendance.setDate(currentDate);
+	    attendance.setInTime(currentTime);
+	    attendance.setUser(user);
+	    attendance.setFixedTime(fixedTime);
 
-		return attendanceRepo.save(attendance);
+	    // Calculate late minutes
+	    long lateMinutes = 0;
+	    if (currentTime.isAfter(fixedTime)) {
+	        lateMinutes = Duration.between(fixedTime, currentTime).toMinutes();
+	    }
+	    attendance.setLateMinutes(lateMinutes);
+
+	    return attendanceRepo.save(attendance);
 	}
+
 
 	public Attendance markOutTime(long id) {
 		System.out.println(id);
@@ -141,6 +153,24 @@ public class AttendanceService {
      public void saveAttendance(Attendance attendance) {
 	        attendanceRepo.save(attendance);
 	    }
-	
+
+     public void updateFixedTime(LocalTime fixedTime) {
+         // Get all attendance records
+         List<Attendance> allAttendances = attendanceRepo.findAll();
+
+         // Update the fixed time for each attendance record
+         for (Attendance attendance : allAttendances) {
+             attendance.setFixedTime(fixedTime);
+         }
+
+         // Save the updated attendance records to the database
+         attendanceRepo.saveAll(allAttendances);
+     }
+
+
+     public LocalTime getCurrentFixedTime() {
+         // Implement logic to fetch the current fixed time from the database or any other source
+         return attendanceRepo.getCurrentFixedTimeFromDatabase(); // You need to implement this method in your repository
+     }
 
 }

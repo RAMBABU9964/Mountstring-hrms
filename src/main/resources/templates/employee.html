@@ -60,7 +60,12 @@
     <h2>Welcome, [[${user.getFullname()}]]</h2>
     <div class="container">
      
-        <div id="attendanceMessage"></div> 
+        <div id="attendanceMessage"></div>
+        <!-- Inside the employee dashboard HTML -->
+<div th:if="${minutesLate}">
+    <p class="bg-red">You are [[${minutesLate}]] minutes late for marking attendance.</p>
+</div>
+         
        
 <div class="cont">
 

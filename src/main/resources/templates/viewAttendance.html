@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>View Attendance</title>
 </head>
 <body>
 <table border>
@@ -12,6 +12,7 @@
 				<th>InTime</th>
 				<th>OutTime</th>
 				<th>Total_Hours</th>
+				<th>Late Time(min)</th>
 				<th>Update</th>
 				
 				
@@ -24,6 +25,7 @@
 				<td th:text="${emp.inTime}"></td>
 				<td th:text="${emp.outTime}"></td>
 				<td th:text="${emp.totalHours}"></td>
+				<td th:text="${emp.lateMinutes}"></td>
 				
 				<td>
 				<a th:href="@{/showFormForUpdateAttendanceForAdmin/{id}(id=${emp.id})}" class="btn btn-primary update-option">Update</a>

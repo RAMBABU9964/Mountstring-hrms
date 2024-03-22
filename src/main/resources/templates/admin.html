@@ -17,7 +17,7 @@
         .header {
             background-color: #45b6fe;
             padding: 10px;
-            width : 132%
+            width : 100%
         }
 
         .header h1 {
@@ -48,7 +48,7 @@
             background-color: white;
             color: rgb(128, 64, 28, 64, 64);
             overflow-x: auto; /* To enable horizontal scrolling on smaller screens */
-            width : 432px !important;
+            width : 718px !important;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
@@ -67,6 +67,11 @@
         <button class="btn btn-primary"><a href="Teams" style="color: white; text-decoration: none;">Teams</a></button>
         <button class="btn btn-danger" onclick="goBack()">Back</button>
         <button class="btn btn-secondary"><a href="@{/logout}" style="color: white; text-decoration: none;">Logout</a></button>
+        <form th:action="@{/updateFixedTime}" method="post">
+    <label for="fixedTime"></label>
+    <input type="time" id="fixedTime" name="fixedTime" placeholder="HH:mm" th:value="${currentFixedTime}">
+    <button type="submit">Update Office Time</button>
+</form>
     </div>
 </div>
 

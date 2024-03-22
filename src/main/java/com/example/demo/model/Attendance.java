@@ -25,6 +25,11 @@ public class Attendance {
 	
 	private double totalHours; 
 	
+	private LocalTime fixedTime;
+	
+	private long lateMinutes;
+	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
@@ -32,16 +37,21 @@ public class Attendance {
 	public Attendance() {
 		super();
 	}
-
-	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours, User user) {
+	
+	
+	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours,
+			LocalTime fixedTime, long lateMinutes, User user) {
 		super();
 		this.id = id;
 		this.date = date;
 		this.inTime = inTime;
 		this.outTime = outTime;
 		this.totalHours = totalHours;
+		this.fixedTime = fixedTime;
+		this.lateMinutes = lateMinutes;
 		this.user = user;
 	}
+
 
 	public long getId() {
 		return id;
@@ -87,15 +97,41 @@ public class Attendance {
 		return user;
 	}
 
+	public LocalTime getFixedTime() {
+		return fixedTime;
+	}
+
+	public void setFixedTime(LocalTime fixedTime) {
+		this.fixedTime = fixedTime;
+	}
+	
+	
+
+	public long getLateMinutes() {
+		return lateMinutes;
+	}
+
+
+	public void setLateMinutes(long lateMinutes) {
+		this.lateMinutes = lateMinutes;
+	}
+
+
 	public void setUser(User user) {
 		this.user = user;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Attendance [id=" + id + ", date=" + date + ", inTime=" + inTime + ", outTime=" + outTime
-				+ ", totalHours=" + totalHours + ", user=" + user + "]";
+				+ ", totalHours=" + totalHours + ", fixedTime=" + fixedTime + ", lateMinutes=" + lateMinutes + ", user="
+				+ user + "]";
 	}
+
+	
+
+	
 
 	
 }
