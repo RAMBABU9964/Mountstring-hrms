@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.model.Attendance;
+import com.example.demo.model.FixedDetails;
 import com.example.demo.model.User;
 import com.example.demo.repository.AttendanceRepo;
 import com.example.demo.service.AttendanceService;
@@ -279,23 +280,32 @@ public class AttendanceController {
 
 	@PostMapping("/updateFixedTime")
 	public String updateFixedTime(@RequestParam("fixedTime") String fixedTimeStr,
-			@RequestParam("fixedoutTime") String fixedTimeStr1, @RequestParam("FixedWorkingHours") String fixedWorkinghrs) {
-		try {
-			// Parse the input string to LocalTime
-			LocalTime fixedTime = LocalTime.parse(fixedTimeStr);
-			LocalTime fixedTime1 = LocalTime.parse(fixedTimeStr1);
-			long seconds = Duration.between(fixedTime, fixedTime1).getSeconds();
-			double fixedWorkingHours = seconds / 3600.0;
+	                              @RequestParam("fixedoutTime") String fixedTimeStr1,
+	                              @RequestParam("FixedWorkingHours") String fixedWorkinghrs,
+	                              Model model) {
+	    try {
+	        // Parse the input string to LocalTime
+	        LocalTime fixedTime = LocalTime.parse(fixedTimeStr);
+	        LocalTime fixedTime1 = LocalTime.parse(fixedTimeStr1);
+	        long seconds = Duration.between(fixedTime, fixedTime1).getSeconds();
+	        double fixedWorkingHours = seconds / 3600.0;
 
-			// Update the fixed time using the service method
-			attendanceService.updateFixedTime(fixedTime, fixedTime1, fixedWorkingHours);
+	        // Check if there's already an existing record for today
+	        List<FixedDetails> recordsForToday = DeatailsRepo.findByCreatedAt(LocalDate.now());
 
-			// Optionally, you can add a success message or handle errors
-		} catch (DateTimeParseException e) {
-			// Handle parsing errors
-		}
+	        if (!recordsForToday.isEmpty()) {
+	            // If a record already exists for today, add a message to the model
+	            model.addAttribute("message", "Fixed time has already been updated for today. Cannot update again.");
+	        } else {
+	            // Update the fixed time using the service method
+	            attendanceService.updateFixedTime(fixedTime, fixedTime1, fixedWorkingHours);
+	        }
 
-		return "redirect:/admin-page";
+	    } catch (DateTimeParseException e) {
+	        // Handle the case where the input string cannot be parsed as LocalTime
+	    }
+
+	    return "redirect:/admin-page";
 	}
 
 }

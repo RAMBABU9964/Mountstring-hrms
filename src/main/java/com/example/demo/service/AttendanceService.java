@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.example.demo.model.Attendance;
 import com.example.demo.model.User;
@@ -83,17 +84,36 @@ public class AttendanceService {
 	public Attendance markOutTime(long id) {
 		System.out.println(id);
 		LocalDate currentDate = LocalDate.now();
+		LocalTime currentTime = LocalTime.now();
 		List<Attendance> attendances = attendanceRepo.findByUserId(id);
+		
+		LocalTime fixedTime;
+		LocalTime fixedOutTime;
+
+		try {
+			// Retrieve current fixed time and fixed out time from the database
+			fixedTime = DetailsRepo.getCurrentFixedTimeFromDatabase();
+			fixedOutTime = DetailsRepo.getCurrentFixedOutTimeFromDatabase();
+		} catch (Exception e) {
+			// Handle the exception
+			// Log the exception or perform error handling as required
+			// Set default fixed time and fixed out time
+			fixedTime = LocalTime.of(9, 30); // Default fixed time
+			fixedOutTime = LocalTime.of(18, 30); // Default fixed time
+		}
 
 		attendances = attendanceRepo.findByDate(currentDate);
 		if (!attendances.isEmpty()) {
 			// Assuming you want to update the latest attendance record,
 			// you can retrieve the last one from the list
 			Attendance attendance = attendances.get(attendances.size() - 1);
-
+			long overMinutes = 0;
+			if (currentTime.isAfter(fixedOutTime)) {
+				overMinutes = Duration.between(fixedOutTime, currentTime).toMinutes();
+			}
 			// Update the out time
 			attendance.setOutTime(LocalTime.now());
-
+            attendance.setOvertime(overMinutes);
 			// Save the updated attendance record
 			return attendanceRepo.save(attendance);
 		} else {
@@ -172,14 +192,14 @@ public class AttendanceService {
 	public void updateFixedTime(LocalTime fixedTime, LocalTime fixedTime1, Double fixedhours) {
 
 		FixedDetails a = new FixedDetails();
+		
 		a.setFixedinTime(fixedTime);
 		a.setFixedOutTime(fixedTime1);
 		a.setFixedworkingHrs(fixedhours);
-		a.setCreatedAt(LocalDateTime.now());
+		a.setCreatedAt(LocalDate.now());
 		DetailsRepo.save(a);
-
-		// Get all attendance records
-
+		
+        
 	}
 
 	public LocalTime getCurrentFixedTime() {

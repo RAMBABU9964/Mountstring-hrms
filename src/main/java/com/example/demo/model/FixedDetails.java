@@ -19,7 +19,7 @@ public class FixedDetails {
 
     private double fixedworkingHrs = 9.0;
 
-    public FixedDetails(Long id, LocalTime fixedinTime, LocalTime fixedOutTime, double fixedworkingHrs, LocalDateTime createdAt) {
+    public FixedDetails(Long id, LocalTime fixedinTime, LocalTime fixedOutTime, double fixedworkingHrs, LocalDate createdAt) {
         this.id = id;
         this.fixedinTime = fixedinTime;
         this.fixedOutTime = fixedOutTime;
@@ -31,7 +31,7 @@ public class FixedDetails {
     }
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt; // Adding createdAt field
+    private LocalDate createdAt; // Adding createdAt field
 
     public Long getId() {
         return id;
@@ -65,11 +65,11 @@ public class FixedDetails {
         this.fixedworkingHrs = fixedworkingHrs;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 // Getters and setters for other fields...
