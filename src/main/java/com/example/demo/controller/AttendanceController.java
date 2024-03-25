@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.repository.FixedDetailsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,13 +38,16 @@ public class AttendanceController {
 	@Autowired
 	AttendanceRepo attendanceRepo;
 
+	@Autowired
+	FixedDetailsRepo DeatailsRepo;
+
 	@GetMapping("/markIn/{id}")
 	public String markInTime(@PathVariable long id, Model model) {
 		// Fetch the employee by ID
 		User user = userService.getEmployeeById(id);
 
 		// Get the fixed time for attendance marking
-		LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
+		LocalTime fixedTime = DeatailsRepo.getCurrentFixedTimeFromDatabase();
 
 		// Check if the current time is after the fixed time
 		if (LocalTime.now().isAfter(fixedTime)) {
@@ -217,7 +221,7 @@ public class AttendanceController {
 		model.addAttribute("attendance", attendance);
 
 		// Fixed time for attendance marking (9:30 AM)
-		LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
+		LocalTime fixedTime = DeatailsRepo.getCurrentFixedTimeFromDatabase();
 
 		// Check if the current time is after the fixed time
 		if (LocalTime.now().isAfter(fixedTime)) {
@@ -275,14 +279,16 @@ public class AttendanceController {
 
 	@PostMapping("/updateFixedTime")
 	public String updateFixedTime(@RequestParam("fixedTime") String fixedTimeStr,
-			@RequestParam("fixedoutTime") String fixedTimeStr1) {
+			@RequestParam("fixedoutTime") String fixedTimeStr1, @RequestParam("FixedWorkingHours") String fixedWorkinghrs) {
 		try {
 			// Parse the input string to LocalTime
 			LocalTime fixedTime = LocalTime.parse(fixedTimeStr);
 			LocalTime fixedTime1 = LocalTime.parse(fixedTimeStr1);
+			long seconds = Duration.between(fixedTime, fixedTime1).getSeconds();
+			double fixedWorkingHours = seconds / 3600.0;
 
 			// Update the fixed time using the service method
-			attendanceService.updateFixedTime(fixedTime, fixedTime1);
+			attendanceService.updateFixedTime(fixedTime, fixedTime1, fixedWorkingHours);
 
 			// Optionally, you can add a success message or handle errors
 		} catch (DateTimeParseException e) {

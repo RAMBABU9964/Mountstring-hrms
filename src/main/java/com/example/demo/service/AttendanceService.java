@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.model.FixedDetails;
+import com.example.demo.repository.FixedDetailsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -28,6 +30,9 @@ public class AttendanceService {
 	AttendanceRepo attendanceRepo;
 
 	@Autowired
+	FixedDetailsRepo DetailsRepo;
+
+	@Autowired
 	UserService userService;
 
 	@Autowired
@@ -36,12 +41,17 @@ public class AttendanceService {
 	public Attendance markInTime(User user) {
 		LocalDate currentDate = LocalDate.now();
 		LocalTime currentTime = LocalTime.now();
-		LocalTime fixedTime = attendanceRepo.getCurrentFixedTimeFromDatabase();
-		LocalTime fixedOutTime = attendanceRepo.getCurrentFixedOutTimeFromDatabase();
+		LocalTime fixedTime;
+		LocalTime fixedOutTime;
 
-		// Check if fixed time is retrieved from the database
-		if (fixedTime == null && fixedOutTime == null) {
-			// Set a default fixed time, assuming it's 9:30 AM
+		try {
+			// Retrieve current fixed time and fixed out time from the database
+			fixedTime = DetailsRepo.getCurrentFixedTimeFromDatabase();
+			fixedOutTime = DetailsRepo.getCurrentFixedOutTimeFromDatabase();
+		} catch (Exception e) {
+			// Handle the exception
+			// Log the exception or perform error handling as required
+			// Set default fixed time and fixed out time
 			fixedTime = LocalTime.of(9, 30); // Default fixed time
 			fixedOutTime = LocalTime.of(18, 30); // Default fixed time
 		}
@@ -50,8 +60,17 @@ public class AttendanceService {
 		attendance.setDate(currentDate);
 		attendance.setInTime(currentTime);
 		attendance.setUser(user);
-		attendance.setFixedTime(fixedTime);
-		attendance.setFixedOutTime(fixedOutTime);
+		//attendance.setFixedDeatilsId(DetailsRepo.findLatestRecord().getId());
+		Optional<FixedDetails> latestRecordOptional = DetailsRepo.findLatestRecordWithId();
+		if (latestRecordOptional.isPresent()) {
+			FixedDetails latestRecord = latestRecordOptional.get();
+			attendance.setFixedDeatilsId(latestRecord); // Set the FixedDetails object
+		} else {
+			// Handle the case where no records are found
+		}
+
+
+
 		// Calculate late minutes
 		long lateMinutes = 0;
 		if (currentTime.isAfter(fixedTime)) {
@@ -61,7 +80,6 @@ public class AttendanceService {
 
 		return attendanceRepo.save(attendance);
 	}
-
 	public Attendance markOutTime(long id) {
 		System.out.println(id);
 		LocalDate currentDate = LocalDate.now();
@@ -151,29 +169,28 @@ public class AttendanceService {
 		attendanceRepo.save(attendance);
 	}
 
-	public void updateFixedTime(LocalTime fixedTime, LocalTime fixedTime1) {
+	public void updateFixedTime(LocalTime fixedTime, LocalTime fixedTime1, Double fixedhours) {
+
+		FixedDetails a = new FixedDetails();
+		a.setFixedinTime(fixedTime);
+		a.setFixedOutTime(fixedTime1);
+		a.setFixedworkingHrs(fixedhours);
+		a.setCreatedAt(LocalDateTime.now());
+		DetailsRepo.save(a);
+
 		// Get all attendance records
-		List<Attendance> allAttendances = attendanceRepo.findAll();
 
-		// Update the fixed time for each attendance record
-		for (Attendance attendance : allAttendances) {
-			attendance.setFixedTime(fixedTime);
-			attendance.setFixedOutTime(fixedTime1);
-		}
-
-		// Save the updated attendance records to the database
-		attendanceRepo.saveAll(allAttendances);
 	}
 
 	public LocalTime getCurrentFixedTime() {
 		// Implement logic to fetch the current fixed time from the database or any
 		// other source
-		return attendanceRepo.getCurrentFixedTimeFromDatabase(); // You need to implement this method in your repository
+		return DetailsRepo.getCurrentFixedTimeFromDatabase(); // You need to implement this method in your repository
 	}
 
 	public LocalTime getCurrentFixedOutTime() {
 		// TODO Auto-generated method stub
-		return attendanceRepo.getCurrentFixedOutTimeFromDatabase();
+		return DetailsRepo.getCurrentFixedOutTimeFromDatabase();
 	}
 
 }

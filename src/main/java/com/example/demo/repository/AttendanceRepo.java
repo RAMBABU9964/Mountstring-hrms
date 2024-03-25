@@ -41,10 +41,6 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Long> {
 
 	Attendance findFirstByOrderById();
 
-	@Query("SELECT MAX(a.fixedTime) FROM Attendance a")
-	LocalTime getCurrentFixedTimeFromDatabase();
 
-	@Query("SELECT MAX(a.fixedOutTime) FROM Attendance a")
-	LocalTime getCurrentFixedOutTimeFromDatabase();
 
 }

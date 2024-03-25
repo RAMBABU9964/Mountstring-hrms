@@ -19,10 +19,11 @@ public class Attendance {
 
 	private double totalHours;
 
-	@Column(name = "fixed_intime")
-	private LocalTime fixedTime;
+	@ManyToOne
+	@JoinColumn(name = "fixeddetails_id")
+	private FixedDetails fixedDeatilsId;
 
-	private LocalTime fixedOutTime;
+
 
 	private long lateMinutes;
 
@@ -32,25 +33,16 @@ public class Attendance {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Override
-	public String toString() {
-		return "Attendance{" + "id=" + id + ", date=" + date + ", inTime=" + inTime + ", outTime=" + outTime
-				+ ", totalHours=" + totalHours + ", fixedTime=" + fixedTime + ", fixedOutTime=" + fixedOutTime
-				+ ", lateMinutes=" + lateMinutes + ", overtime=" + overtime + ", user=" + user + '}';
-	}
-
 	public Attendance() {
 	}
 
-	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours,
-			LocalTime fixedTime, LocalTime fixedOutTime, long lateMinutes, double overtime, User user) {
+	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours, FixedDetails fixedDeatilsId, long lateMinutes, double overtime, User user) {
 		this.id = id;
 		this.date = date;
 		this.inTime = inTime;
 		this.outTime = outTime;
 		this.totalHours = totalHours;
-		this.fixedTime = fixedTime;
-		this.fixedOutTime = fixedOutTime;
+		this.fixedDeatilsId = fixedDeatilsId;
 		this.lateMinutes = lateMinutes;
 		this.overtime = overtime;
 		this.user = user;
@@ -96,20 +88,12 @@ public class Attendance {
 		this.totalHours = totalHours;
 	}
 
-	public LocalTime getFixedTime() {
-		return fixedTime;
+	public FixedDetails getFixedDeatilsId() {
+		return fixedDeatilsId;
 	}
 
-	public void setFixedTime(LocalTime fixedTime) {
-		this.fixedTime = fixedTime;
-	}
-
-	public LocalTime getFixedOutTime() {
-		return fixedOutTime;
-	}
-
-	public void setFixedOutTime(LocalTime fixedOutTime) {
-		this.fixedOutTime = fixedOutTime;
+	public void setFixedDeatilsId(FixedDetails fixedDeatilsId) {
+		this.fixedDeatilsId = fixedDeatilsId;
 	}
 
 	public long getLateMinutes() {
