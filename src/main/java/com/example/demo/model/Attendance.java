@@ -3,7 +3,6 @@ package com.example.demo.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -17,18 +16,17 @@ public class Attendance {
 	private LocalTime inTime;
 
 	private LocalTime outTime;
-	
-	private double totalHours; 
+
+	private double totalHours;
 
 	@Column(name = "fixed_intime")
-	private LocalTime fixedTime = LocalTime.of(9, 30);
+	private LocalTime fixedTime;
 
-	private LocalTime fixedOutTime = LocalTime.of(18, 30);
-	
+	private LocalTime fixedOutTime;
+
 	private long lateMinutes;
 
 	private double overtime;
-
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
@@ -36,24 +34,16 @@ public class Attendance {
 
 	@Override
 	public String toString() {
-		return "Attendance{" +
-				"id=" + id +
-				", date=" + date +
-				", inTime=" + inTime +
-				", outTime=" + outTime +
-				", totalHours=" + totalHours +
-				", fixedTime=" + fixedTime +
-				", fixedOutTime=" + fixedOutTime +
-				", lateMinutes=" + lateMinutes +
-				", overtime=" + overtime +
-				", user=" + user +
-				'}';
+		return "Attendance{" + "id=" + id + ", date=" + date + ", inTime=" + inTime + ", outTime=" + outTime
+				+ ", totalHours=" + totalHours + ", fixedTime=" + fixedTime + ", fixedOutTime=" + fixedOutTime
+				+ ", lateMinutes=" + lateMinutes + ", overtime=" + overtime + ", user=" + user + '}';
 	}
 
 	public Attendance() {
 	}
 
-	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours, LocalTime fixedTime, LocalTime fixedOutTime, long lateMinutes, double overtime, User user) {
+	public Attendance(long id, LocalDate date, LocalTime inTime, LocalTime outTime, double totalHours,
+			LocalTime fixedTime, LocalTime fixedOutTime, long lateMinutes, double overtime, User user) {
 		this.id = id;
 		this.date = date;
 		this.inTime = inTime;

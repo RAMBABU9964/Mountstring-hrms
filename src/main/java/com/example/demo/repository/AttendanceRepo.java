@@ -19,20 +19,18 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Long> {
 	Optional<Attendance> findById(User user);
 
 	@Query("SELECT a FROM Attendance a WHERE a.user.id = :userId")
-   List<Attendance> findByUserId(long userId);
-  
-	
-	//List<Attendance> findByUserIdAndDate(int userId, LocalDate indate);
+	List<Attendance> findByUserId(long userId);
+
+	// List<Attendance> findByUserIdAndDate(int userId, LocalDate indate);
 
 	List<Attendance> findByDate(LocalDate date);
 
-	
 	@Query("SELECT a FROM Attendance a WHERE a.user.id = :userId AND a.date = :date")
 	List<Attendance> findByUserIdAndDate(long userId, LocalDate date);
 
 	@Query("SELECT a FROM Attendance a WHERE a.user.id = :userId")
-Optional<Attendance> findTopByEmplyeeIdOrderByIdDesc(long userId);
-	
+	Optional<Attendance> findTopByEmplyeeIdOrderByIdDesc(long userId);
+
 	@Query("SELECT a.inTime FROM Attendance a WHERE a.user.id = :userId AND a.date = :todayDate")
 	LocalTime findInTimeByUserIdAndDate(@Param("userId") long userId, @Param("todayDate") LocalDate todayDate);
 
@@ -40,14 +38,13 @@ Optional<Attendance> findTopByEmplyeeIdOrderByIdDesc(long userId);
 	LocalTime findInTimeByUserIdAndDate1(@Param("userId") long userId, @Param("todayDate") LocalDate todayDate);
 
 	Attendance findById(long id);
-	
+
 	Attendance findFirstByOrderById();
-	
+
 	@Query("SELECT MAX(a.fixedTime) FROM Attendance a")
 	LocalTime getCurrentFixedTimeFromDatabase();
-	
+
 	@Query("SELECT MAX(a.fixedOutTime) FROM Attendance a")
 	LocalTime getCurrentFixedOutTimeFromDatabase();
 
-	 
 }
