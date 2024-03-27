@@ -40,15 +40,17 @@
 					</form>
 				</td>
 				<td>
-				<p>[[${team.user}]]</p>
-					<form th:action="@{/removeUserFromTeam/{userId}(userId=${selectedUserId})}" method="post">
-    <select name="selectedUserId">
-        
-        <option th:each="user : ${team.user}" th:value="${user.id}" th:text="${user.fullname}"></option>
-    </select>
-    <input type="hidden" name="teamId" th:value="${team.id}">
-    <button type="submit">Remove</button>
-</form>
+
+					<form
+						th:action="@{/removeUserFromTeam/{teamId}(teamId=${team.id})}"
+						method="post">
+						<select name="userId">
+
+							<option th:each="user : ${team.user}" th:value="${user.id}"
+								th:text="${user.fullname}"></option>
+						</select> <input type="hidden" name="teamId" th:value="${team.id}">
+						<button type="submit">Remove</button>
+					</form>
 
 				</td>
 

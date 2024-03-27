@@ -88,12 +88,14 @@ public class TeamsController {
 	    }
 	    return "redirect:/viewTeams";
 	}
-	@PostMapping("/removeUserFromTeam/{userId}")
-	public String removeUserFromTeam(@PathVariable("userId") Long userId, @RequestParam("teamId") Long teamId) {
+	@PostMapping("/removeUserFromTeam/{teamId}")
+	public String removeUserFromTeam(@RequestParam("userId") Long userId, @PathVariable("teamId") Long teamId) {
 	    User userToRemove = service.getEmployeeById(userId);
 	    Teams team = service2.getTeamById(teamId);
 	    if (userToRemove != null && team != null && team.getUser().contains(userToRemove)) {
 	        service2.removeUserFromTeam(userToRemove, team);
+	    }else {
+	    	return "redirect:/viewTeams";
 	    }
 	    return "redirect:/viewTeams";
 	}
