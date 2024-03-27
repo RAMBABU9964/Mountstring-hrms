@@ -14,6 +14,7 @@ public class UserDto {
 	private String fullname;
 	private String phoneNumber;
 	private String salary;
+	private String empRole;
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] image;
@@ -22,9 +23,8 @@ public class UserDto {
 		super();
 	}
 
-	
 	public UserDto(String email, String password, String role, String fullname, String phoneNumber, String salary,
-			byte[] image) {
+			String empRole, byte[] image) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -32,20 +32,9 @@ public class UserDto {
 		this.fullname = fullname;
 		this.phoneNumber = phoneNumber;
 		this.salary = salary;
+		this.empRole = empRole;
 		this.image = image;
 	}
-
-	
-
-	public String getSalary() {
-		return salary;
-	}
-
-
-	public void setSalary(String salary) {
-		this.salary = salary;
-	}
-
 
 	public String getEmail() {
 		return email;
@@ -87,6 +76,22 @@ public class UserDto {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public String getSalary() {
+		return salary;
+	}
+
+	public void setSalary(String salary) {
+		this.salary = salary;
+	}
+
+	public String getEmpRole() {
+		return empRole;
+	}
+
+	public void setEmpRole(String empRole) {
+		this.empRole = empRole;
+	}
+
 	public byte[] getImage() {
 		return image;
 	}
@@ -95,12 +100,11 @@ public class UserDto {
 		this.image = image;
 	}
 
-
 	@Override
 	public String toString() {
 		final int maxLen = 10;
 		return "UserDto [email=" + email + ", password=" + password + ", role=" + role + ", fullname=" + fullname
-				+ ", phoneNumber=" + phoneNumber + ", salary=" + salary + ", image="
+				+ ", phoneNumber=" + phoneNumber + ", salary=" + salary + ", empRole=" + empRole + ", image="
 				+ (image != null ? Arrays.toString(Arrays.copyOf(image, Math.min(image.length, maxLen))) : null) + "]";
 	}
 

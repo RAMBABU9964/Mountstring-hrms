@@ -56,6 +56,13 @@
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: red;
         }
+        .btn1{
+        margin-bottom: 5px;
+        }
+        #FixedWorkingHours{
+        width: 35px;
+        }
+        
     </style>
 </head>
 <body>
@@ -69,13 +76,13 @@
    
     <div class=" row">
         <div class="col-md-4">
-        <button class="btn btn-primary"><a href="registration" style="color: white; text-decoration: none;">NEW REGISTER</a></button>
+        <button class="btn btn-primary btn1"><a href="registration" style="color: white; text-decoration: none;">NEW REGISTER</a></button>
         </div>
         <div class="col-md-4">
-        <button class="btn btn-primary"><a href="myprofile" style="color: white; text-decoration: none;">My Profile</a></button>
+        <button class="btn btn-primary btn1"><a href="myprofile" style="color: white; text-decoration: none;">My Profile</a></button>
         </div>
         <div class="col-md-4">
-        <button class="btn btn-primary"><a href="ListPresent" style="color: white; text-decoration: none;">Today Employees Attendance</a></button>
+        <button class="btn btn-primary btn1"><a href="ListPresent" style="color: white; text-decoration: none;">Today Employees Attendance</a></button>
         </div>
         <div class="col-md-4">
         <button class="btn btn-primary"><a href="Teams" style="color: white; text-decoration: none;">Teams</a></button>
@@ -87,21 +94,25 @@
         <div class="col-md-4">
         <form th:action="@{/updateFixedTime}" method="post">
     <label for="fixedTime">in</label>
-    <input type="time" id="fixedTime" name="fixedTime" placeholder="HH:mm" th:value="${currentFixedTime}">
+    <input type="time" id="fixedTime" name="fixedTime" placeholder="HH:mm" th:value="${currentFixedTime}"/>
            <label for="fixedTime">out</label>
-            <input type="time" id="fixedoutTime" name="fixedoutTime" placeholder="HH:mm" th:value="${currentFixedTime1}">
+            <input type="time" id="fixedoutTime" name="fixedoutTime" placeholder="HH:mm" th:value="${currentFixedTime1}"/>
             <label for="FixedWorkingHours">Working Hrs</label>
-            <input type="time" id="FixedWorkingHours" name="FixedWorkingHours" placeholder="9.0" th:value=0>
-    <button type="submit">Update Office Time</button>
+            <input type="text" id="FixedWorkingHours" name="FixedWorkingHours" placeholder="9.0" th:value="${currentFixedTime2}"/>
+   
+    
+    <th:block th:if="${fixed != null and fixed.size() > 0}">
+        <p>Today's timing has already been updated. You Can Change Tomorrow</p>
+
+    </th:block>
+    <th:block th:if="${fixed != null and fixed.size() <= 0}">
+      <button type="submit" >Update Timing</button>
+    </th:block>
+   
 </form>
         </div>
     </div>
 </div>
-
-<!-- Alert message section -->
-
-    <span th:text="${message}">[{${message}}]</span> <!-- Display the message from the model -->
-
 
 <!-- Table section -->
 <div class="container-table">
@@ -132,6 +143,9 @@
                     <a th:href="@{/viewAttendance/{id}(id=${emp.id})}" class="btn btn-primary update-option">Attendance</a>
                     <a th:href="@{/markAttendance/{id}(id=${emp.id})}" class="btn btn-primary update-option">Mark Attendance</a>
                     <a th:href="@{/bankAccount/{id}(id=${emp.id})}" class="btn btn-primary update-option">Bank Account Details</a>
+                     <form th:action="@{/removeUserFromAllTeams/{id}(id=${emp.id})}" method="post">
+                    <button type="submit" class="btn btn-danger update-option" onclick="return confirm('Are you sure you want to remove this user from all teams?')">Remove from All Teams</button>
+                      </form>
                 </div>
             </td>
         </tr>
@@ -150,6 +164,8 @@
         window.history.back();
     }
 </script>
+
+
 
 </body>
 </html>

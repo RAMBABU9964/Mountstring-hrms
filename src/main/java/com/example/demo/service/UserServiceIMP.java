@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.UserDto;
+import com.example.demo.model.Teams;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 
@@ -22,7 +23,8 @@ public class UserServiceIMP implements UserService {
 	
 	@Override
 	public User sava(UserDto userDto) {
-		User user=new User(userDto.getEmail(),passwordEncoder.encode(userDto.getPassword()) , userDto.getRole(), userDto.getFullname(),userDto.getPhoneNumber(),userDto.getSalary(),userDto.getImage());
+		
+		User user=new User(userDto.getEmail(),passwordEncoder.encode(userDto.getPassword()) , userDto.getRole(), userDto.getFullname(),userDto.getPhoneNumber(),userDto.getSalary(),userDto.getEmpRole(),userDto.getImage());
 		return userRepository.save(user);
 	}
 	
@@ -106,6 +108,7 @@ public class UserServiceIMP implements UserService {
 	public List<User> fetchAlluser() {
 		return userRepository.findAll();
 	}
+
 	
 	
 }

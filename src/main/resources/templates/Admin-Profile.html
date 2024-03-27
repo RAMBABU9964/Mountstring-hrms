@@ -97,12 +97,12 @@
     </div>
     
     <div th:if="${intime == null}">
-        <a th:href="@{/markIn/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button class="bg-green" onclick="showMessage('Today attendance marked intime successfully')">Mark Intime Attendance</button></a>
+        <a th:href="@{/marksIn/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button class="bg-green" onclick="showMessage('Today attendance marked intime successfully')">Mark Intime Attendance</button></a>
     </div>
     <br>
     
     <div th:if="${outtime == null && intime != null}">
-        <a th:href="@{/markOut/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button onclick="showMessage('Today attendance marked outtime successfully')" class="bg-green">Mark Outtime Attendance</button></a>
+        <a th:href="@{/marksOut/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button onclick="showMessage('Today attendance marked outtime successfully')" class="bg-green">Mark Outtime Attendance</button></a>
     </div>
     <br>
     <a th:href="@{/viewAttendance/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>View Attendance Detaile</button></a>

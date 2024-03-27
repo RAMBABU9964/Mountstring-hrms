@@ -2,36 +2,58 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Teams List</title>
 </head>
 <body>
-<table border>
+	<table border>
 		<thead>
 			<tr>
 				<th>Team_Id</th>
 				<th>Team_Name</th>
-				
 				<th>Employee_Name</th>
-
+				<th>Add User</th>
+				<th>Remove User</th>
+				<!-- New column for adding users -->
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="team:${allTeams}">
+			<tr th:each="team, teamIndex : ${allTeams}">
 				<td th:text="${team.id}"></td>
 				<td th:text="${team.teamName}"></td>
 				<td>
 					<ul>
-						<li th:each="user:${team.user}">
-                        <Span th:text="${user.fullname}"></span>
-                        
-                        </li>
+						<li th:each="user : ${team.user}"><span
+							th:text="${user.fullname}"></span></li>
 					</ul>
-
+				</td>
+				<td>
+					<form th:action="@{/addUserToTeam/{teamId}(teamId=${team.id})}"
+						method="post">
+						<select name="userId">
+							<option th:each="user : ${allUsers}"
+								th:unless="${team.user.contains(user)}" th:value="${user.id}"
+								th:text="${user.fullname}"></option>
+						</select> 
+						<input type="hidden" name="teamId" th:value="${team.id}">
+						<input type="hidden" name="addedUserId" th:value="${addedUserId}">
+						<button type="submit">Add</button>
+					</form>
+				</td>
+				<td>
+				<p>[[${team.user}]]</p>
+					<form th:action="@{/removeUserFromTeam/{userId}(userId=${selectedUserId})}" method="post">
+    <select name="selectedUserId">
+        
+        <option th:each="user : ${team.user}" th:value="${user.id}" th:text="${user.fullname}"></option>
+    </select>
+    <input type="hidden" name="teamId" th:value="${team.id}">
+    <button type="submit">Remove</button>
+</form>
 
 				</td>
 
 			</tr>
 		</tbody>
-		</table>
+	</table>
 </body>
 </html>

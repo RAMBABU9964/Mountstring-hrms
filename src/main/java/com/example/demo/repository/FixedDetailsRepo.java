@@ -25,6 +25,9 @@ public interface FixedDetailsRepo extends JpaRepository<FixedDetails, Long> {
     
     List<FixedDetails> findByCreatedAt(LocalDate createdAt);
 
+    @Query("SELECT fd.fixedworkingHrs FROM FixedDetails fd WHERE fd.id = (SELECT MAX(fd2.id) FROM FixedDetails fd2)")
+	double getCurrentFixedworkingHrsDatabase();
+
 	
 	
 }

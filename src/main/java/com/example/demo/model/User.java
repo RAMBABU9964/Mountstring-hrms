@@ -26,6 +26,8 @@ public class User {
 	private String fullname;
 	private String phoneNumber;
 	private String salary;
+	private String empRole;
+	
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] image;
@@ -38,7 +40,7 @@ public class User {
 	}
 
 	public User(String email, String password, String role, String fullname, String phoneNumber, String salary,
-			byte[] image) {
+			String empRole, byte[] image) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -46,15 +48,9 @@ public class User {
 		this.fullname = fullname;
 		this.phoneNumber = phoneNumber;
 		this.salary = salary;
+		this.empRole = empRole;
 		this.image = image;
-	}
-
-	public String getSalary() {
-		return salary;
-	}
-
-	public void setSalary(String salary) {
-		this.salary = salary;
+		
 	}
 
 	public long getId() {
@@ -105,6 +101,22 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
+	public String getSalary() {
+		return salary;
+	}
+
+	public void setSalary(String salary) {
+		this.salary = salary;
+	}
+
+	public String getEmpRole() {
+		return empRole;
+	}
+
+	public void setEmpRole(String empRole) {
+		this.empRole = empRole;
+	}
+
 	public byte[] getImage() {
 		return image;
 	}
@@ -125,9 +137,10 @@ public class User {
 	public String toString() {
 		final int maxLen = 10;
 		return "User [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + ", fullname="
-				+ fullname + ", phoneNumber=" + phoneNumber + ", salary=" + salary + ", image="
+				+ fullname + ", phoneNumber=" + phoneNumber + ", salary=" + salary + ", empRole=" + empRole + ", image="
 				+ (image != null ? Arrays.toString(Arrays.copyOf(image, Math.min(image.length, maxLen))) : null)
 				+ ", teams=" + (teams != null ? teams.subList(0, Math.min(teams.size(), maxLen)) : null) + "]";
 	}
 
+	
 }

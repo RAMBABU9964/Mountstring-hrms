@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -17,26 +18,29 @@ public class SalaryCalculator {
 	
 	private double dailySalary;
 	
-	
-	
 	@OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "attendance_id", nullable = false)
+    private Attendance attendance;
 
 	public SalaryCalculator() {
 		super();
 	}
 
-	public SalaryCalculator(long id, double dailySalary, User user) {
+	
+	
+
+	public SalaryCalculator(long id, double dailySalary, Attendance attendance) {
 		super();
 		this.id = id;
 		this.dailySalary = dailySalary;
-		this.user = user;
+		
+		this.attendance = attendance;
 	}
 
 	@Override
 	public String toString() {
-		return "SalaryCalculator [id=" + id + ", dailySalary=" + dailySalary + ", user=" + user + "]";
+		return "SalaryCalculator [id=" + id + ", dailySalary=" + dailySalary + ", attendance="
+				+ attendance + "]";
 	}
 
 	public long getId() {
@@ -55,12 +59,14 @@ public class SalaryCalculator {
 		this.dailySalary = dailySalary;
 	}
 
-	public User getUser() {
-		return user;
+	
+
+	public Attendance getAttendance() {
+		return attendance;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAttendance(Attendance attendance) {
+		this.attendance = attendance;
 	}
 	
 	

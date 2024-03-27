@@ -21,8 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.dto.UserDto;
+import com.example.demo.model.Attendance;
+import com.example.demo.model.BankAccountDetails;
+import com.example.demo.model.FixedDetails;
 import com.example.demo.model.User;
 import com.example.demo.repository.AttendanceRepo;
+import com.example.demo.repository.BankAccountDetailsRepo;
+import com.example.demo.repository.FixedDetailsRepo;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.UserService;
 
@@ -40,6 +45,12 @@ public class UserController {
 
 	@Autowired
 	AttendanceService attendanceService;
+	
+	@Autowired
+	FixedDetailsRepo detailsRepo;
+	
+	@Autowired
+	BankAccountDetailsRepo accountDetailsRepo;
 
 //******************************************************************************************************	
 	@GetMapping("/")
@@ -123,12 +134,16 @@ public class UserController {
 
 		LocalTime presentFixedTime = attendanceService.getCurrentFixedTime();
 		LocalTime presentFixedTime2 = attendanceService.getCurrentFixedOutTime();
+		double time=attendanceService.getCurrentfixedworkingHrs();
 
 		// Pass the present fixed time to the HTML template
 		model.addAttribute("currentFixedTime", presentFixedTime);
 		model.addAttribute("currentFixedTime1", presentFixedTime2);
+		model.addAttribute("currentFixedTime2", time);
 
 		List<User> allDate = userService.fetchAllData();
+		List<FixedDetails> a=detailsRepo.findByCreatedAt(LocalDate.now());
+		model.addAttribute("fixed", a);
 		model.addAttribute("user", userDetails);
 		model.addAttribute("list", allDate);
 		return "admin";
@@ -182,9 +197,27 @@ public class UserController {
 	// Delete function only for the admin
 	@GetMapping("/deleteEmployee/{id}")
 	public String deleteEmployee(@PathVariable(value = "id") Long id) {
+		
+	try {
+		BankAccountDetails accountDetails=accountDetailsRepo.findByUserId(id);
+		List<Attendance> attendance=attendanceRepo.findByUserId(id);
+	if(accountDetails !=null && attendance !=null) {
+		accountDetailsRepo.delete(accountDetails);
+		attendanceService.deletByUserId(id);
 		userService.deleteEmplyeeById(id);
+	}else if(accountDetails !=null && attendance ==null) {
+		accountDetailsRepo.delete(accountDetails);
+	    userService.deleteEmplyeeById(id);
+	}else if(accountDetails ==null && attendance !=null) {
+		attendanceService.deletByUserId(id);
+	    userService.deleteEmplyeeById(id);
+	}
 		System.out.println("Delete Sucessfully");
 		return "redirect:/admin-page";
+		
+	}catch(Exception e){
+		return "errorPageForDelete";
+	}
 	}
 
 //*************************************************************************************************************************

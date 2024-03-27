@@ -41,6 +41,8 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Long> {
 
 	Attendance findFirstByOrderById();
 
+	
+
 
 
 }

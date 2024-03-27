@@ -112,6 +112,14 @@
 				ADMIN<input type="radio" name="role" id="role" onclick = "event1()" value="ADMIN" /> <br>
             </div>
             <br>
+            <div id = "roleContainer" style="display: none;"><label>Employee_Role : </label><br>
+				developer<input type="radio" name="empRole" value="developer" /> 
+				front end<input type="radio" name="empRole" value="frontEnd" /> 
+				AWS<input type="radio" name="empRole" value="AWS" /> 
+				tester<input type="radio" name="empRole" value="tester" />  
+				Intern<input type="radio" name="empRole" value="Intern" />
+				</div>
+				 <br />
             <div class="form-group">
                 <label for="password">Salary : </label>
                 <input  type="text" id="salary" name="salary" placeholder="Enter salary" required>
@@ -127,5 +135,21 @@
         </form>
         
     </div>
+    
+     <script>
+        function event1() {
+        	const a = document.querySelector('input[name="role"]:checked').value;
+        	console.log(a);
+        	const b = document.getElementById('roleContainer');
+        	b.style.display = "";
+        	console.log(b);
+        	if (a == "ADMIN"){
+        		b.style.display = "none";
+        	} 
+        	else {
+        		b.style.display = "block";
+        	}
+        	}
+        </script>
 </body>
 </html>

@@ -13,6 +13,7 @@
 				<th>OutTime</th>
 				<th>Total_Hours</th>
 				<th>Late Time(min)</th>
+				<th>Over Time(min)</th>
 				<th>Update</th>
 				
 				
@@ -26,6 +27,7 @@
 				<td th:text="${emp.outTime}"></td>
 				<td th:text="${emp.totalHours}"></td>
 				<td th:text="${emp.lateMinutes}"></td>
+				<td th:text="${emp.overtime}"></td>
 				
 				<td>
 				<a th:href="@{/showFormForUpdateAttendanceForAdmin/{id}(id=${emp.id})}" class="btn btn-primary update-option">Update</a>

@@ -212,5 +212,14 @@ public class AttendanceService {
 		// TODO Auto-generated method stub
 		return DetailsRepo.getCurrentFixedOutTimeFromDatabase();
 	}
+	public double getCurrentfixedworkingHrs() {
+		// TODO Auto-generated method stub
+		return DetailsRepo.getCurrentFixedworkingHrsDatabase();
+	}
+	public void deletByUserId(Long id) {
+		List<Attendance> attendance=attendanceRepo.findByUserId(id);
+		attendanceRepo.deleteAll(attendance);
+		
+	}
 
 }
