@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Employee Documents</title>
+</head>
+<body>
+    <h2>Upload Employee Documents</h2>
+   <form th:action="'/uploadDoc/' + ${empDoc.user.id}" method="post" th:object="${empDocs}" enctype="multipart/form-data">
+ 
+        <label for="document10th">10th Document:</label><br>
+        <input type="file" id="document10th" name="document10th" accept=".pdf"><br><br>
+        
+        <label for="documentInter">Intermediate Document:</label><br>
+        <input type="file" id="documentInter" name="documentInter" accept=".pdf"><br><br>
+        
+        <label for="documentGraduation">Graduation Document:</label><br>
+        <input type="file" id="documentGraduation" name="documentGraduation" accept=".pdf"><br><br>
+        
+        <label for="resume">Resume:</label><br>
+        <input type="file" id="resume" name="resume" accept=".pdf"><br><br>
+        
+        <label for="aadhar">Aadhar Card:</label><br>
+        <input type="file" id="aadhar" name="aadhar" accept=".pdf"><br><br>
+        
+        <label for="passportSizePhoto">Passport Size Photo:</label><br>
+        <input type="file" id="passportSizePhoto" name="passportSizePhoto" accept=".jpg,.jpeg,.png"><br><br>
+        
+        <label for="githubLink">GitHub Link:</label><br>
+        <input type="text" id="githubLink" name="githubLink" placeholder="Enter GitHub Link"><br><br>
+        
+        <button type="submit">Upload Documents</button>
+    </form>
+</body>
+</html>

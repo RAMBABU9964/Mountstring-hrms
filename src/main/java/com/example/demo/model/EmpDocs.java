@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.Arrays;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,26 +11,33 @@ public class EmpDocs {
     private Long id;
 
     @Lob
+    @Column(length = 100000)
     private byte[] document10th;
 
     @Lob
+    @Column(length = 100000)
     private byte[] documentInter;
 
     @Lob
+    @Column(length = 100000)
     private byte[] documentGraduation;
 
     @Lob
+    @Column(length = 100000)
     private byte[] resume;
 
     @Lob
+    @Column(length = 100000)
     private byte[] aadhar;
+    
     @Lob
+    @Column(length = 100000)
     private byte[] passportSizePhoto;
 
     private String githubLink;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     public EmpDocs(Long id, byte[] document10th, byte[] documentInter, byte[] documentGraduation, byte[] resume, byte[] aadhar, byte[] passportSizePhoto, String githubLink, User user) {
@@ -117,4 +126,28 @@ public class EmpDocs {
     public void setUser(User user) {
         this.user = user;
     }
+
+	@Override
+	public String toString() {
+		final int maxLen = 10;
+		return "EmpDocs [id=" + id + ", document10th="
+				+ (document10th != null ? Arrays
+						.toString(Arrays.copyOf(document10th, Math.min(document10th.length, maxLen))) : null)
+				+ ", documentInter="
+				+ (documentInter != null ? Arrays
+						.toString(Arrays.copyOf(documentInter, Math.min(documentInter.length, maxLen))) : null)
+				+ ", documentGraduation="
+				+ (documentGraduation != null ? Arrays.toString(
+						Arrays.copyOf(documentGraduation, Math.min(documentGraduation.length, maxLen))) : null)
+				+ ", resume="
+				+ (resume != null ? Arrays.toString(Arrays.copyOf(resume, Math.min(resume.length, maxLen))) : null)
+				+ ", aadhar="
+				+ (aadhar != null ? Arrays.toString(Arrays.copyOf(aadhar, Math.min(aadhar.length, maxLen))) : null)
+				+ ", passportSizePhoto="
+				+ (passportSizePhoto != null
+						? Arrays.toString(Arrays.copyOf(passportSizePhoto, Math.min(passportSizePhoto.length, maxLen)))
+						: null)
+				+ ", githubLink=" + githubLink + ", user=" + user + "]";
+	}
+    
 }

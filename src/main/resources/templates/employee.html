@@ -112,7 +112,8 @@
     <br>
     <a th:href="@{/viewAttendanceEmployee/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>View Attendance Detaile</button></a>
     <br><br>
-    
+    <a th:href="@{/addEmpDoc/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>Uplode Documents</button></a>
+    <br><br>   
     
         <span sec:authorize="isAuthenticated">
         <a th:href="@{/logout}">

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>Documents</h1>
+<!-- Display PDF file -->
+
+<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase64}" type="application/pdf" width="50%" height="300px">
+    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+</object>
+<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase641}" type="application/pdf" width="50%" height="300px">
+    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+</object>
+<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase642}" type="application/pdf" width="50%" height="300px">
+    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+</object>
+<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase643}" type="application/pdf" width="50%" height="300px">
+    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+</object>
+
+<!-- Display Word document -->
+
+
+</body>
+</html>
