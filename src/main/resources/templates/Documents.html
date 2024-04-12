@@ -3,26 +3,81 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+/* CSS for beautifying the page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.object-container {
+    margin-bottom: 20px;
+}
+
+object {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+</style>
 </head>
 <body>
-<h1>Documents</h1>
-<!-- Display PDF file -->
+<div class="container">
+    <h1>Documents</h1>
 
-<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase64}" type="application/pdf" width="50%" height="300px">
-    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
-</object>
-<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase641}" type="application/pdf" width="50%" height="300px">
-    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
-</object>
-<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase642}" type="application/pdf" width="50%" height="300px">
-    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
-</object>
-<object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase643}" type="application/pdf" width="50%" height="300px">
-    <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
-</object>
+    <!-- Display PDF files -->
+    <div class="object-container">
+        <object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase64}" type="application/pdf" width="100%" height="300px">
+            <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+        </object>
+    </div>
+    <div class="object-container">
+        <object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase641}" type="application/pdf" width="100%" height="300px">
+            <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+        </object>
+    </div>
+    <div class="object-container">
+        <object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase642}" type="application/pdf" width="100%" height="300px">
+            <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+        </object>
+    </div>
+    <div class="object-container">
+        <object th:if="${pdfBase64}" th:data="'data:application/pdf;base64,' + ${pdfBase643}" type="application/pdf" width="100%" height="300px">
+            <p>It appears you don't have a PDF plugin for this browser. You can <a th:href="${pdfUrl}" target="_blank">download the PDF file</a> instead.</p>
+        </object>
+    </div>
 
-<!-- Display Word document -->
+    <!-- Display Word document -->
 
-
+</div>
 </body>
 </html>

@@ -1,9 +1,14 @@
 package com.example.demo.service;
 
+import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +16,9 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.model.Teams;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class UserServiceIMP implements UserService {
@@ -20,6 +28,10 @@ public class UserServiceIMP implements UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
+
 	
 	@Override
 	public User sava(UserDto userDto) {
@@ -109,6 +121,55 @@ public class UserServiceIMP implements UserService {
 		return userRepository.findAll();
 	}
 
+	@Override
+	public void sendEmail(String subject, String message) {
+	    List<User> allEmployees = fetchAlluser();
+	    for (User employee : allEmployees) {
+	        if ("EMPLOYEE".equals(employee.getRole())) { // Check if the user's role is EMPLOYEE
+	            try {
+	                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+	                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+	                String emailContent = "<p>Hello " + employee.getFullname() + ",</p>"
+	                        + "<p>" + message + "</p>"
+	                        + "<p>Thank you.</p>"
+	                        + "<p>Mount String Technologies Support</p>";
+
+	                helper.setText(emailContent, true);
+	                helper.setFrom("your-email@example.com", "Mount String");
+	                helper.setSubject(subject);
+	                helper.setTo(employee.getEmail());
+	                javaMailSender.send(mimeMessage);
+	            } catch (MessagingException | UnsupportedEncodingException e) {
+	                e.printStackTrace(); // Handle or log the exception as needed
+	            }
+	        }
+	    }
+	}
+
 	
+	
+	@Override
+	public void sendEmail2(String subject, String message,User user) {
+	    List<User> allEmployees = fetchAlluser();
+	    for (User employee : allEmployees) {
+	        if ("ADMIN".equals(employee.getRole())) { // Check if the user's role is Admin
+	            try {
+	                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+	                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+	                String emailContent = "<p>Hi This is  " + employee.getFullname() + " This message regerading for request for the leave,</p>"
+	                        + "<p>" + message + "</p>"
+	                        + "<p>Thank you.</p>";
+
+	                helper.setText(emailContent, true);
+	                helper.setFrom(user.getEmail(), "Mount String");
+	                helper.setSubject(subject);
+	                helper.setTo(employee.getEmail());
+	                javaMailSender.send(mimeMessage);
+	            } catch (MessagingException | UnsupportedEncodingException e) {
+	                e.printStackTrace(); // Handle or log the exception as needed
+	            }
+	        }
+	    }
+	}
 	
 }

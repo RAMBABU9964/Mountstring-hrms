@@ -45,6 +45,7 @@ public class SecurityConfig {
 				.requestMatchers("/forgot-password").permitAll()
 				.requestMatchers("/password-request").permitAll()
 				.requestMatchers("/password").permitAll()
+				.requestMatchers("HomePage").permitAll()
 				.requestMatchers("/reset-password").permitAll().anyRequest()
 				.authenticated())
 		
@@ -54,7 +55,7 @@ public class SecurityConfig {
 		
 		.logout(form -> form.invalidateHttpSession(true).clearAuthentication(true)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login?logout").permitAll());
+				.logoutSuccessUrl("/?logout").permitAll());
 		
 		
 		return http.build();

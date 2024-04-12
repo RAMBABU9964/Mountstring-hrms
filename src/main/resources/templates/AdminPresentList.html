@@ -4,10 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Present Employee List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: box-shadow 0.3s;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .update-option {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .update-option:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-    <h1>Today Employees Present List</h1>
-    <table border="1">
+    <h1>Today's Present Employees List</h1>
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
@@ -27,9 +76,8 @@
                 <td th:text="${attendance.outTime}"></td>
                 <td th:text="${attendance.totalHours}"></td>
                 <td>
-				<a th:href="@{/showFormForUpdateAttendanceForAdmin/{id}(id=${attendance.id})}" class="btn btn-primary update-option">Update</a>
-        
-				</td>
+                    <a th:href="@{/showFormForUpdateAttendanceForAdmin/{id}(id=${attendance.id})}" class="update-option">Update</a>
+                </td>
             </tr>
         </tbody>
     </table>

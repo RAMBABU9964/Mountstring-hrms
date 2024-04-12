@@ -1,146 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0e2433;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Dashboard</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+	integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+	crossorigin="anonymous">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: lightsteelblue;
+	color: white;
+	margin: 0;
+	padding: 0;
+}
 
-        .header {
-            background-color: #45b6fe;
-            padding: 20px;
-            text-align: center;
-        }
+.header {
+	background-color: royalblue;
+	padding: 20px;
+	text-align: center;
+	position: relative;
+	position: fixed;
+	top: 0px;
+	z-index: 100000;
+	width: 100%;
+}
 
-        .header h1 {
-            margin: 0;
-        }
-        
-          
-    .bg-green {
-        background-color: green;
-        color: white;
-    }   
-    .bg-red {
-        background-color: red;
-        color: white;
-    }
+.header h1 {
+	margin: 0;
+}
 
-        .container {
-            max-width: 1200px;
-            text-align:center;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #0e2433;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
+.toggle-links {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: 1px;
+	background-color: royalblue;
+	padding: 10px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 
-        h2 {
-            color: #45b6fe;
-            text-align: center;
-        }
+.toggle-links a {
+	display: block;
+	color: white;
+	text-decoration: none;
+	margin-bottom: 5px;
+}
 
+.toggle-links a:hover {
+	text-decoration: underline;
+}
 
-        /* Add more styles and components for your dashboard here */
-    </style>
+.hamburger {
+	position: absolute;
+	top: 83%;
+    right: 3px;
+	transform: translateY(-50%);
+	cursor: pointer;
+	color: white;
+	font-size: 25px;
+}
+
+.bg-green {
+	background-color: green;
+	color: white;
+}
+
+.bg-red {
+	background-color: red;
+	color: white;
+}
+
+.container {
+	max-width: 500px;
+	margin: 5px auto;
+	padding: 0px;
+	background-color: white;
+	color: black;
+	border-radius: 10px;
+	box-shadow: 0 0 15px rgba(0.2, 0, 0, 0.4);
+	margin-top: 6.3rem !important;
+}
+
+.employee-image {
+	border-radius: 50%;
+	position: relative;
+	display: inline-flex;
+}
+
+.image-update-container {
+	display: none;
+	text-align: center;
+	padding-top: 58px;
+	padding-left: 99px;
+}
+
+.update-symbol {
+	color: white;
+	cursor: pointer;
+	font-size: 20px;
+	position: absolute;
+	bottom: -58px;
+	right: 380px;
+	background-color: royalblue;
+	border: 5px solid white;
+	padding: 0px;
+	border-radius: 50%;
+}
+
+.update-symbols {
+	color: white;
+	cursor: pointer;
+	font-size: 20px;
+	position: absolute;
+	bottom: -20px;
+	right: 0px;
+	background-color: royalblue;
+	border: 5px solid white;
+	padding: 5px;
+	border-radius: 50%;
+}
+
+.update-symbol:hover {
+	color: darkblue;
+}
+
+.dp-container {
+	position: relative;
+}
+
+.employee-dpimage {
+	position: absolute;
+	top: 92px;
+	left: -490px;
+	border-radius: 50%;
+	height: 100px;
+	width: 117px;
+	border: 5px solid white;
+}
+
+.employee-coverimages {
+	width: 500px;
+	height: 139px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.Details {
+	/* padding: 05; */
+	margin-top: 77px !important;
+	margin-left: 35px;
+}
+
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: revert;
+    line-height: initial;
+}
+
+.markattendance{
+margin-left: 150px;
+}
+#attendanceMessage{
+background-color:royalblue;
+color: white;
+text-align: center;
+}
+/* Add more styles and components for your dashboard here */
+</style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Employee Dashboard</h1>
-    </div>
-    <h2>Welcome, [[${user.getFullname()}]]</h2>
-    <div class="container">
-     
-        <div id="attendanceMessage"></div>
-        <!-- Inside the employee dashboard HTML -->
-<div th:if="${minutesLate}">
-    <p class="bg-red">You are [[${minutesLate}]] minutes late for marking attendance.</p>
-</div>
-         
-       
-<div class="cont">
+	<div class="header">
+		<h1>Welcome, [[${user.getFullname()}]]</h1>
+		<!-- Hamburger icon for toggling links -->
+		<div class="hamburger" onclick="toggleLinks()">&#9776;</div>
+		<!-- Links container -->
+		<div class="toggle-links" id="links">
+			<a th:href="@{/showFormForUpdateAdmin/{id}(id=${employee.id})}"
+				class="btn btn-primary update-option">Update Profile</a> <br> 
+				<a th:href="@{/viewAttendanceEmployee/{id}(id=${employee.id})}"
+				class="btn btn-primary update-option btns">View Attendance
+				Detail</a> <br>
+				 <a th:href="@{/addEmpDoc/{id}(id=${employee.id})}" class="btn btn-primary update-option btns">Upload Documents</a> <br>
+				 <a th:href="@{/leaveMessage/{id}(id=${employee.id})}" class="btn btn-primary update-option btns">Leave Message</a> <br>
+				 
+			<br> <br> <span sec:authorize="isAuthenticated"> <a
+				th:href="@{/logout}">Logout</a>
+			</span>
+		</div>
+	</div>
 
-<p th:if="${imageBase64 != null}">
-            
-            <img th:src="'data:image/png;base64,' + ${imageBase64}" alt="Employee Image" width="200" style="border: 0.1px solid white; border-radius: 50%;"/>
-      
-       <form th:action=@{/updateEmployeeImage/{id}(id=${employee.id})} method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept="image/*">
-    <button type="submit">Update Image</button>
-</form>
-        </p>
+	<div class="container">
+		<div id="attendanceMessage"></div>
+		<!-- Inside the employee dashboard HTML -->
+		<div th:if="${minutesLate}">
+			<p class="bg-red">You are [[${minutesLate}]] minutes late for
+				marking attendance.</p>
+		</div>
 
-        <p><strong>ID:</strong> [[${employee.id}]]</p>
-        <p><strong>Name:</strong> [[${employee.fullname}]]</p>
-        <p><strong>Role:</strong> [[${employee.role}]]</p>
-        <p><strong>Email:</strong> [[${employee.email}]]</p>
-        <p><strong>PhoneNumber:</strong> [[${employee.phoneNumber}]]</p>
-        <p><strong>Salary:</strong> [[${employee.salary}]]</p>
+		<div class="cont">
 
-</div>
+			<div class="image-container">
+				<!-- Employee image -->
+				<p th:if="${imageBase64 != null}">
+				<div class="employee-image">
+					<div>
+						<img class="employee-coverimages"
+							th:src="'data:image/png;base64,' + ${imageBase65}"
+							alt="Employee Image" width="" />
+						<div class="update-symbols"
+							onclick="toggleBackGroundImageUpdate()">✎</div>
+					</div>
+					<div class="dp-container">
+						<img class="employee-dpimage"
+							th:src="'data:image/png;base64,' + ${imageBase64}"
+							alt="Employee Image" width="200" />
+						<div class="update-symbol" onclick="toggleImageUpdate()">✎</div>
+					</div>
+				</div>
 
-<a th:href="@{/showFormForUpdateAdmin/{id}(id=${employee.id})}" class="btn btn-primary update-option">Update</a>
+			</div>
+                
+			<!-- Update image form -->
+			<div class="image-update-container" id="updateImageForm">
+				<form th:action="@{/updateEmployeeImage/{id}(id=${employee.id})}"
+					method="post" enctype="multipart/form-data">
+					<input type="file" name="image" accept="image/*">
+					<button type="submit">Update Image</button>
+				</form>
+			</div>
+			<div class="image-update-container" id="updateBackGroundImageForm">
+				<form
+					th:action="@{/updateEmployeebackGroundImage/{id}(id=${employee.id})}"
+					method="post" enctype="multipart/form-data">
+					<input type="file" name="image" accept="image/*">
+					<button type="submit">Update BackGroundImage</button>
+				</form>
+			</div>
+
+             
+			<div class="Details mt-5">
+				<div>
+					<p>
+						<strong>ID:</strong> [[${employee.id}]]
+					</p>
+					<p>
+						<strong>Name:</strong> [[${employee.fullname}]]
+					</p>
+					<p>
+						<strong>Role:</strong> [[${employee.role}]]
+					</p>
+					<p>
+						<strong>Email:</strong> [[${employee.email}]]
+					</p>
+					<p>
+						<strong>PhoneNumber:</strong> [[${employee.phoneNumber}]]
+					</p>
+					<p>
+						<strong>Salary:</strong> [[${employee.salary}]]
+					</p>
+				</div>
+			</div>
+         <div class="markattendance">
+			<div th:if="${intime != null}">
+				<a class="btn  update-option"><button
+						onclick="showMessage('You Already Marked Today InTime Attendance')"
+						class="bg-red">Marked Intime Attendance</button></a>
+			</div>
+			<br>
+
+			<div th:if="${outtime != null}">
+				<a class="btn  update-option"><button
+						onclick="showMessage('You Already Marked Today OutTime Attendance')"
+						class="bg-red">Marked Outtime Attendance</button></a>
+			</div>
+
+			<div th:if="${intime == null}">
+				<a th:href="@{/markIn/{id}(id=${employee.id})}"
+					class="btn  update-option"><button class="bg-green"
+						onclick="showMessage('Today attendance marked intime successfully')">Mark
+						Intime Attendance</button></a>
+			</div>
+			<br>
+
+			<div th:if="${outtime == null && intime != null}">
+				<a th:href="@{/markOut/{id}(id=${employee.id})}"
+					class="btn  update-option"><button
+						onclick="showMessage('Today attendance marked outtime successfully')"
+						class="bg-green">Mark Outtime Attendance</button></a>
+			</div>
+			<br>
+			</div>
+		</div>
+
+	</div>
+	<script>
+        function showMessage(message) {
+    document.getElementById('attendanceMessage').innerHTML = '<p>' + message + '</p>';
+    
+    // Automatically close the message after 2 seconds
+    setTimeout(function() {
+        document.getElementById('attendanceMessage').innerHTML = ''; // Clear the message
+    }, 2000); // 2000 milliseconds = 2 seconds
+}
+
+        function toggleImageUpdate() {
+            var updateImageForm = document.getElementById('updateImageForm');
+            if (updateImageForm.style.display === 'none') {
+                updateImageForm.style.display = 'block';
+            } else {
+                updateImageForm.style.display = 'none';
+            }
+        }
         
-        <br>
-        <br>
-        <div th:if="${intime != null}">
-        <a class="btn btn-primary update-option bg-green"><button onclick="showMessage('You Already Marked Today InTime Attendance')" class="bg-red">Marked Intime Attendance</button></a>
-    </div>
-    <br>
-    
-    <div th:if="${outtime != null}">
-        <a class="btn btn-primary update-option bg-red"><button onclick="showMessage('You Already Marked Today OutTime Attendance')" class="bg-red">Marked Outtime Attendance</button></a>
-    </div>
-    
-    <div th:if="${intime == null}">
-        <a th:href="@{/markIn/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button class="bg-green" onclick="showMessage('Today attendance marked intime successfully')">Mark Intime Attendance</button></a>
-    </div>
-    <br>
-    
-    <div th:if="${outtime == null && intime != null}">
-        <a th:href="@{/markOut/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button onclick="showMessage('Today attendance marked outtime successfully')" class="bg-green">Mark Outtime Attendance</button></a>
-    </div>
-    <br>
-    <a th:href="@{/viewAttendanceEmployee/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>View Attendance Detaile</button></a>
-    <br><br>
-    <a th:href="@{/addEmpDoc/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>Uplode Documents</button></a>
-    <br><br>   
-    
-        <span sec:authorize="isAuthenticated">
-        <a th:href="@{/logout}">
-         Logout
+        function toggleBackGroundImageUpdate() {
+            var updateImageForm = document.getElementById('updateBackGroundImageForm');
+            if (updateImageForm.style.display === 'none') {
+                updateImageForm.style.display = 'block';
+            } else {
+                updateImageForm.style.display = 'none';
+            }
+        }
         
-        </a>
-        
-        </span>
-
-    </div>
-    
-    <script>
-    function showMessage(message) {
-        document.getElementById('attendanceMessage').innerHTML = '<p>' + message + '</p>';
-    }
-</script>
-
-<script>
-    function showMessage(message) {
-        var messageElement = document.getElementById('attendanceMessage');
-        messageElement.innerHTML = '<p>' + message + '</p>';
-        
-        // Automatically close the message after 3 seconds
-        setTimeout(function() {
-            messageElement.innerHTML = ''; // Clear the message after 3 seconds
-        }, 3000);
-    }
-</script>
+        function toggleLinks() {
+            var links = document.getElementById('links');
+            links.style.display = (links.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>

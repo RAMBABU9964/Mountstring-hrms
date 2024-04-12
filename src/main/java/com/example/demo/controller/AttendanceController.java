@@ -242,6 +242,7 @@ public class AttendanceController {
 
 		if (user != null) {
 			List<Attendance> attendance = attendanceRepo.findByUserId(id);
+			model.addAttribute("user", user);
 			model.addAttribute("view", attendance);
 		} else {
 			return "redirect:/admin-page";

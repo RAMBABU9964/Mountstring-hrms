@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Attendance;
 import com.example.demo.model.BankAccountDetails;
+import com.example.demo.model.EmpDocs;
 import com.example.demo.model.FixedDetails;
 import com.example.demo.model.User;
 import com.example.demo.repository.AttendanceRepo;
 import com.example.demo.repository.BankAccountDetailsRepo;
+import com.example.demo.repository.EmpDocsRepository;
 import com.example.demo.repository.FixedDetailsRepo;
 import com.example.demo.service.AttendanceService;
 import com.example.demo.service.UserService;
@@ -51,11 +55,14 @@ public class UserController {
 	
 	@Autowired
 	BankAccountDetailsRepo accountDetailsRepo;
+	
+	@Autowired
+	EmpDocsRepository docsRepository;
 
 //******************************************************************************************************	
 	@GetMapping("/")
 	public String back() {
-		return "login";
+		return "HomePage";
 
 	}
 
@@ -103,16 +110,18 @@ public class UserController {
 
 		if (employee != null && employee.getImage() != null) {
 			String imageBase64 = Base64.getEncoder().encodeToString(employee.getImage());
+			
 			model.addAttribute("imageBase64", imageBase64);
+			
+		}
+		if(employee.getBackGroundImage() !=null) {
+			String imageBase65 = Base64.getEncoder().encodeToString(employee.getBackGroundImage());
+			model.addAttribute("imageBase65", imageBase65);
 		}
 
 		// Add employee object to the model to pass it to the view
 		if (employee != null) {
 			model.addAttribute("employee", employee);
-		} else {
-			// Handle the case where the employee is not found
-			// You can add appropriate error handling or redirect to an error page
-			return "employeeNotFound"; // Assuming you have a template for displaying employee not found
 		}
 
 		LocalTime a = attendanceRepo.findInTimeByUserIdAndDate(employee.getId(), LocalDate.now());
@@ -142,6 +151,14 @@ public class UserController {
 		model.addAttribute("currentFixedTime2", time);
 
 		List<User> allDate = userService.fetchAllData();
+		Map<Long, String> imageBase64Map = new HashMap<>(); // Map to associate imageBase64 with user id
+	    for (User us : allDate) {
+	        if (us.getImage() != null) { // Check if the image source is not null
+	            String imageBase64 = Base64.getEncoder().encodeToString(us.getImage());
+	            imageBase64Map.put(us.getId(), imageBase64); // Associate imageBase64 with user id
+	        }
+	    }
+	    model.addAttribute("imageBase64Map", imageBase64Map); // Add 
 		List<FixedDetails> a=detailsRepo.findByCreatedAt(LocalDate.now());
 		model.addAttribute("fixed", a);
 		model.addAttribute("user", userDetails);
@@ -201,15 +218,32 @@ public class UserController {
 	try {
 		BankAccountDetails accountDetails=accountDetailsRepo.findByUserId(id);
 		List<Attendance> attendance=attendanceRepo.findByUserId(id);
-	if(accountDetails !=null && attendance !=null) {
+		EmpDocs empDocs=docsRepository.findByUserId(id);
+	if(accountDetails !=null && attendance !=null && empDocs !=null) {
 		accountDetailsRepo.delete(accountDetails);
 		attendanceService.deletByUserId(id);
+		docsRepository.delete(empDocs);
 		userService.deleteEmplyeeById(id);
-	}else if(accountDetails !=null && attendance ==null) {
+	}else if(accountDetails !=null && attendance ==null && empDocs ==null ) {
 		accountDetailsRepo.delete(accountDetails);
 	    userService.deleteEmplyeeById(id);
-	}else if(accountDetails ==null && attendance !=null) {
+	}else if(accountDetails ==null && attendance !=null && empDocs ==null) {
 		attendanceService.deletByUserId(id);
+	    userService.deleteEmplyeeById(id);
+	}else if(accountDetails ==null && attendance ==null && empDocs !=null) {
+		docsRepository.delete(empDocs);
+	    userService.deleteEmplyeeById(id);
+	}else if(accountDetails !=null && attendance ==null && empDocs !=null ) {
+		accountDetailsRepo.delete(accountDetails);
+		docsRepository.delete(empDocs);
+	    userService.deleteEmplyeeById(id);
+	}else if(accountDetails ==null && attendance !=null && empDocs !=null) {
+		attendanceService.deletByUserId(id);
+		docsRepository.delete(empDocs);
+	    userService.deleteEmplyeeById(id);
+	}else if(accountDetails !=null && attendance !=null && empDocs ==null) {
+		attendanceService.deletByUserId(id);
+		accountDetailsRepo.delete(accountDetails);
 	    userService.deleteEmplyeeById(id);
 	}
 		System.out.println("Delete Sucessfully");
@@ -259,16 +293,44 @@ public class UserController {
 				userService.updateEmployee(employee);
 				// redirectAttributes.addFlashAttribute("successMessage", "Employee image
 				// updated successfully.");
-				return "redirect:/viewEmployee/{id}";
+				return "redirect:/employee-page";
 			} else {
 				// redirectAttributes.addFlashAttribute("errorMessage", "Employee not found or
 				// image is empty.");
-				return "login";
+				return "redirect:/employee-page";
 			}
 		} catch (IOException e) {
 			// redirectAttributes.addFlashAttribute("errorMessage", "Error updating image: "
 			// + e.getMessage());
-			return "redirect:/employeeDetails";
+			return "redirect:/employee-page";
+		}
+	}
+	
+//*******************************************************************************************************************************
+	
+	@PostMapping("/updateEmployeebackGroundImage/{id}")
+	public String updateEmployeebackGroundImage(@PathVariable("id") Long id, @RequestParam("image") MultipartFile imageFile,
+			RedirectAttributes redirectAttributes) {
+		try {
+			// Retrieve employee by ID
+			User employee = userService.findById(id);
+
+			if (employee != null && !imageFile.isEmpty()) {
+				// Update employee image
+				employee.setBackGroundImage(imageFile.getBytes());
+				userService.updateEmployee(employee);
+				// redirectAttributes.addFlashAttribute("successMessage", "Employee image
+				// updated successfully.");
+				return "redirect:/employee-page";
+			} else {
+				// redirectAttributes.addFlashAttribute("errorMessage", "Employee not found or
+				// image is empty.");
+				return "redirect:/employee-page";
+			}
+		} catch (IOException e) {
+			// redirectAttributes.addFlashAttribute("errorMessage", "Error updating image: "
+			// + e.getMessage());
+			return "redirect:/employee-page";
 		}
 	}
 
@@ -312,6 +374,41 @@ public class UserController {
 	}
 
 //**************************************************************************************************************************	
+	
+//***************************************************************************************************************************
+	 @GetMapping("/updatemessage")
+	    public String updateMessageForm(Model model) {
+	        model.addAttribute("message", ""); // Add an empty message attribute to the model
+	        return "updateMessageForm"; // Return the name of your HTML template for the message form
+	    }
+
+	    @PostMapping("/updatemessage")
+	    public String sendMessageToEmployees(@RequestParam("message") String message) {
+	       
+	            userService.sendEmail( "Update From The Mount String", message);
+	        
+	        return "redirect:/admin-page"; // Redirect to the admin page after sending the message
+	    }
+	    
+//***************************************************************************************************************************
+		 @GetMapping("/leaveMessage/{id}")
+		    public String leaveMessageForm(Model model,@PathVariable(value = "id") Long id) {
+			 User user=userService.findById(id);
+			 model.addAttribute("user", user);
+		        model.addAttribute("message", ""); // Add an empty message attribute to the model
+		        return "LeaveMessageForm"; // Return the name of your HTML template for the message form
+		    }
+
+		    @PostMapping("/leaveMessage/{id}")
+		    public String sendMessageToAdmin(@RequestParam("message") String message,@RequestParam("id") long id) {
+		       User user=userService.findById(id);
+		       
+		            userService.sendEmail2( "Leave Request", message,user);
+		        
+		        return "redirect:/employee-page"; // Redirect to the admin page after sending the message
+		    }
+	
+//**************************************************************************************************************************************
 	// Function for the forgot password
 
 	/*
@@ -332,3 +429,5 @@ public class UserController {
 	 */
 
 }
+
+

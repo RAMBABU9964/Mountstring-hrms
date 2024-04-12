@@ -2,47 +2,76 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Update Employee Attendance</title>
 
 <style type="text/css">
-input {
-	margin-bottom: 10px;
-}
-
-.submite {
-	height: 35px;
-	width: 70px;
-	font-size: 15px;
-}
-
-.submite:hover {
-	background-color: green;
-}
-
-label {
-	font-size: 20px;
-	margin-bottom: 5px;
-	margin-top: 15px;
-	margin-right: 70px;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-	width: 350px;
-	height: 250px;
-	border: 3px solid black;
-	border-radius: 7px;
-	box-shadow: 20px;
-	text-align: center;
-	justify-content: center;
-	margin-left: 33%;
-	font-size: 20px;
+    width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 h1 {
-	align-content: center;
-	justify-content: center;
-	margin-left: 30%;
-	margin-top: 10%;
+    text-align: center;
+    color: #333;
+}
+
+form {
+    text-align: center;
+}
+
+label {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="time"] {
+    width: 200px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.back-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
 }
 </style>
 </head>
@@ -50,32 +79,24 @@ h1 {
 <body>
 <h1>Update Employee Attendance</h1>
 <div class="container">
-  
     <form action="#" th:action="@{'/saveAttendance/' + ${employee.id}}" th:object="${employee}" method="post">
-        
+        <label for="inTime">In Time:</label><br>
+        <input type="time" id="inTime" th:field="*{inTime}"><br><br>
        
-        
-        <label for="email">InTime:</label><br>
-        <input type="time" th:field="*{inTime}" class="form-control mb-4 col-4"><br><br>
+        <label for="outTime">Out Time:</label><br>
+        <input type="time" id="outTime" th:field="*{outTime}"><br><br>
        
-        <label for="email">OutTime:</label><br>
-        <input type="time" th:field="*{outTime}" class="form-control mb-4 col-4"><br><br>
-       
-       
-      
-        <button type="submit" class="submite">Update</button>
+        <button type="submit">Update</button>
     </form>
-
-    </div>
-    
-    <br><br>
-    <div>
-	<button onclick="goBack()"><span class="symbol" onclick="toggleOptions(this)">&#8592;</span> Back</button>
 </div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
+<br><br>
+<div style="text-align:center;">
+    <button onclick="goBack()" class="back-btn">&#8592; Back</button>
+</div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>

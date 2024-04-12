@@ -30,6 +30,12 @@ public interface UserService {
 
 	List<User> fetchAlluser();
 
+	void sendEmail( String string, String message);
+
+	void sendEmail2(String string, String message, User user);
+	
+	
+
 	
 
 	

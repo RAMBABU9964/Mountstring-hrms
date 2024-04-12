@@ -3,59 +3,108 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Teams List</title>
+<style>
+/* CSS styles for header */
+.header {
+    background-color: #87CEEB; /* Light blue background color */
+    color: white; /* White text color */
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+     text-transform: uppercase;
+}
+/* CSS styles for table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for a subtle effect */
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* CSS styles for buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s; /* Smooth transition for background color change */
+}
+button:hover {
+    background-color: #45a049; /* Darker shade of green on hover */
+}
+button:active {
+    background-color: #3e8e41; /* Even darker shade of green on click */
+}
+</style>
 </head>
 <body>
-	<table border>
-		<thead>
-			<tr>
-				<th>Team_Id</th>
-				<th>Team_Name</th>
-				<th>Employee_Name</th>
-				<th>Add User</th>
-				<th>Remove User</th>
-				<!-- New column for adding users -->
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="team, teamIndex : ${allTeams}">
-				<td th:text="${team.id}"></td>
-				<td th:text="${team.teamName}"></td>
-				<td>
-					<ul>
-						<li th:each="user : ${team.user}"><span
-							th:text="${user.fullname}"></span></li>
-					</ul>
-				</td>
-				<td>
-					<form th:action="@{/addUserToTeam/{teamId}(teamId=${team.id})}"
-						method="post">
-						<select name="userId">
-							<option th:each="user : ${allUsers}"
-								th:unless="${team.user.contains(user)}" th:value="${user.id}"
-								th:text="${user.fullname}"></option>
-						</select> 
-						<input type="hidden" name="teamId" th:value="${team.id}">
-						<input type="hidden" name="addedUserId" th:value="${addedUserId}">
-						<button type="submit">Add</button>
-					</form>
-				</td>
-				<td>
+    <div class="header">
+        <h1>Teams Details</h1>
+    </div>
+    <table border>
+        <thead>
+            <tr>
+                <th>Team Id</th>
+                <th>Team Name</th>
+                <th>Employee Name</th>
+                <th>Add User</th>
+                <th>Remove User</th>
+                <!-- New column for adding users -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="team, teamIndex : ${allTeams}">
+                <td th:text="${team.id}"></td>
+                <td th:text="${team.teamName}"></td>
+                <td>
+                    <ul>
+                        <li th:each="user : ${team.user}"><span
+                            th:text="${user.fullname}"></span></li>
+                    </ul>
+                </td>
+                <td>
+                    <form th:action="@{/addUserToTeam/{teamId}(teamId=${team.id})}"
+                        method="post">
+                        <select name="userId">
+                            <option th:each="user : ${allUsers}"
+                                th:unless="${team.user.contains(user)}" th:value="${user.id}"
+                                th:text="${user.fullname}"></option>
+                        </select> 
+                        <input type="hidden" name="teamId" th:value="${team.id}">
+                        <input type="hidden" name="addedUserId" th:value="${addedUserId}">
+                        <button type="submit" onmouseover="this.style.backgroundColor='#3e8e41'" onmouseout="this.style.backgroundColor='#4CAF50'">Add</button>
+                    </form>
+                </td>
+                <td>
 
-					<form
-						th:action="@{/removeUserFromTeam/{teamId}(teamId=${team.id})}"
-						method="post">
-						<select name="userId">
+                    <form
+                        th:action="@{/removeUserFromTeam/{teamId}(teamId=${team.id})}"
+                        method="post">
+                        <select name="userId">
 
-							<option th:each="user : ${team.user}" th:value="${user.id}"
-								th:text="${user.fullname}"></option>
-						</select> <input type="hidden" name="teamId" th:value="${team.id}">
-						<button type="submit">Remove</button>
-					</form>
+                            <option th:each="user : ${team.user}" th:value="${user.id}"
+                                th:text="${user.fullname}"></option>
+                        </select> <input type="hidden" name="teamId" th:value="${team.id}">
+                        <button type="submit" onmouseover="this.style.backgroundColor='#f44336'" onmouseout="this.style.backgroundColor='#4CAF50'">Remove</button>
+                    </form>
 
-				</td>
+                </td>
 
-			</tr>
-		</tbody>
-	</table>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

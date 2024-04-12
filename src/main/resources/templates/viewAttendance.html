@@ -3,8 +3,66 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>View Attendance</title>
+<style type="text/css">
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .update-option {
+    display: inline-block;
+    padding: 8px 12px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .update-option:hover {
+    background-color: #0056b3;
+  }
+  .header {
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+</style>
 </head>
 <body>
+
+<div class="header">
+    <h1> [[${user.fullname}]], Attendance Details</h1>
+</div>
+
 <table border>
 		<thead>
 			<tr>

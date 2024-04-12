@@ -3,138 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Dashboard</title>
+    <title>Admin Profile Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #0e2433;
+            background-color: lightsteelblue;
             color: white;
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #45b6fe;
+            background-color:  #007bff;
             padding: 20px;
             text-align: center;
+            position: relative;
+             border-bottom: 4px solid #0056b3;
+             position: fixed;
+	        top: 0px;
+	        z-index: 100000;
+	       width: 100%;
         }
 
         .header h1 {
             margin: 0;
+            display: inline-block;
         }
-        
-          
-    .bg-green {
-        background-color: green;
-        color: white;
-    }   
-    .bg-red {
-        background-color: red;
-        color: white;
-    }
+
+        .menu-toggle {
+            position: absolute;
+            top: 60%;
+            right: 50px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: white;
+            font-size: 25px;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 50px;
+            background-color: #007bff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+
+        .menu.show {
+            display: block;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        .menu a:hover {
+            background-color: navy;
+        }
 
         .container {
-            max-width: 1200px;
+            max-width: 600px;
             text-align:center;
-            margin: 20px auto;
+            margin: 5px auto;
             padding: 20px;
-            background-color: #0e2433;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            background-color: cornflowerblue;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0.2, 0, 0, 0.4);
+            margin-top: 5.7rem !important;
         }
 
-        h2 {
-            color: #45b6fe;
+       
+        .employee-image {
+           
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+        }
+        
+         .image-update-container {
+            display: none;
             text-align: center;
         }
-
+   .update-symbol{
+      color: royalblue;
+      cursor: pointer;
+      font-size: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: white;
+      padding: 5px;
+      border-radius: 50%;
+      }
+        .bg-red{
+         background-color: red;
+         color: white;
+        }
+        .bg-green{
+        background-color: green;
+        color: white;
+        }
 
         /* Add more styles and components for your dashboard here */
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Admin-Profile Dashboard</h1>
+<div class="header">
+    <h1>Welcome, [[${user.getFullname()}]]</h1>
+    <!-- Move the menu toggle to the right side -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+        &#9776; <!-- Hamburger icon -->
     </div>
-    <h2>Welcome, [[${user.getFullname()}]]</h2>
-    <div class="container">
-     
-        <div id="attendanceMessage"></div> 
-       
-<div class="cont">
+    <!-- Move View Attendance and Logout links to header -->
+    <div class="menu" id="menu">
+        <a th:href="@{/viewAttendance/{id}(id=${employee.id})}" class="btn btn-primary update-option">View Attendance Details</a><br>
+        <a th:href="@{/showFormForUpdateAdmin/{id}(id=${employee.id})}" class="btn btn-primary update-option">Update Profile</a><br><br>
+        
+        <a th:href="@{/logout}" class="btn btn-primary update-option">Logout</a><br>
+    </div>
+</div>
 
-<p th:if="${imageBase64 != null}">
-            
-            <img th:src="'data:image/png;base64,' + ${imageBase64}" alt="Employee Image" width="200" style="border: 0.1px solid white; border-radius: 50%;"/>
-      
-       <form th:action=@{/updateEmployeeImage/{id}(id=${employee.id})} method="post" enctype="multipart/form-data">
-    <input type="file" name="image" accept="image/*">
-    <button type="submit">Update Image</button>
-</form>
-        </p>
-
+<div class="container">
+    <div id="attendanceMessage"></div>
+    <div class="cont">
+        <!-- Your existing container content here -->
+       <p th:if="${imageBase64 != null}">
+                <div class="image-container">
+                    <!-- Employee image -->
+                    <p th:if="${imageBase64 != null}">
+                        <div class="employee-image">
+                            <img class="employee-image" th:src="'data:image/png;base64,' + ${imageBase64}" alt="Employee Image" width="200"/>
+                            <div class="update-symbol" onclick="toggleImageUpdate()">✎</div>
+                        </div>
+                    </p>
+                </div>
+        
+                <!-- Update image form -->
+                <div class="image-update-container" id="updateImageForm">
+                    <form th:action="@{/updateEmployeeImage/{id}(id=${employee.id})}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="image" accept="image/*">
+                        <button type="submit">Update Image</button>
+                    </form>
+                </div>
         <p><strong>ID:</strong> [[${employee.id}]]</p>
         <p><strong>Name:</strong> [[${employee.fullname}]]</p>
         <p><strong>Role:</strong> [[${employee.role}]]</p>
         <p><strong>Email:</strong> [[${employee.email}]]</p>
         <p><strong>PhoneNumber:</strong> [[${employee.phoneNumber}]]</p>
         <p><strong>Salary:</strong> [[${employee.salary}]]</p>
+    </div>
 
-</div>
-
-<a th:href="@{/showFormForUpdateAdmin/{id}(id=${employee.id})}" class="btn btn-primary update-option">Update</a>
-        
-        <br>
-        <br>
-        <div th:if="${intime != null}">
-        <a class="btn btn-primary update-option bg-green"><button onclick="showMessage('You Already Marked Today InTime Attendance')" class="bg-red">Marked Intime Attendance</button></a>
-    </div>
-    <br>
     
-    <div th:if="${outtime != null}">
-        <a class="btn btn-primary update-option bg-red"><button onclick="showMessage('You Already Marked Today OutTime Attendance')" class="bg-red">Marked Outtime Attendance</button></a>
-    </div>
-    
-    <div th:if="${intime == null}">
-        <a th:href="@{/marksIn/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button class="bg-green" onclick="showMessage('Today attendance marked intime successfully')">Mark Intime Attendance</button></a>
-    </div>
-    <br>
-    
-    <div th:if="${outtime == null && intime != null}">
-        <a th:href="@{/marksOut/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button onclick="showMessage('Today attendance marked outtime successfully')" class="bg-green">Mark Outtime Attendance</button></a>
-    </div>
-    <br>
-    <a th:href="@{/viewAttendance/{id}(id=${employee.id})}" class="btn btn-primary update-option"><button>View Attendance Detaile</button></a>
-    <br><br>
-    
-    
-        <span sec:authorize="isAuthenticated">
-        <a th:href="@{/logout}">
-         Logout
-        
+    <div th:if="${intime != null}">
+        <a class="btn btn-primary update-option bg-green">
+            <button onclick="showMessage('You Already Marked Today InTime Attendance')" class="bg-red">Marked Intime Attendance</button>
         </a>
-        
-        </span>
-
     </div>
+    <br>
+    <div th:if="${outtime != null}">
+        <a class="btn btn-primary update-option bg-red">
+            <button onclick="showMessage('You Already Marked Today OutTime Attendance')" class="bg-red">Marked Outtime Attendance</button>
+        </a>
+    </div>
+    <div th:if="${intime == null}">
+        <a th:href="@{/marksIn/{id}(id=${employee.id})}" class="btn btn-primary update-option">
+            <button class="bg-green" onclick="showMessage('Today attendance marked intime successfully')">Mark Intime Attendance</button>
+        </a>
+    </div>
+    <br>
+    <div th:if="${outtime == null && intime != null}">
+        <a th:href="@{/marksOut/{id}(id=${employee.id})}" class="btn btn-primary update-option">
+            <button onclick="showMessage('Today attendance marked outtime successfully')" class="bg-green">Mark Outtime Attendance</button>
+        </a>
+    </div>
+    <br>
     
-    <script>
-    function showMessage(message) {
-        document.getElementById('attendanceMessage').innerHTML = '<p>' + message + '</p>';
-    }
-</script>
+</div>
 
 <script>
     function showMessage(message) {
         var messageElement = document.getElementById('attendanceMessage');
         messageElement.innerHTML = '<p>' + message + '</p>';
-        
         // Automatically close the message after 3 seconds
         setTimeout(function() {
             messageElement.innerHTML = ''; // Clear the message after 3 seconds
         }, 3000);
     }
+
+    function toggleMenu() {
+        var menu = document.getElementById('menu');
+        menu.classList.toggle('show');
+    }
+    
+    function toggleImageUpdate() {
+            var updateImageForm = document.getElementById('updateImageForm');
+            if (updateImageForm.style.display === 'none') {
+                updateImageForm.style.display = 'block';
+            } else {
+                updateImageForm.style.display = 'none';
+            }
+        }
+        
+        function toggleLinks() {
+            var links = document.getElementById('links');
+            links.style.display = (links.style.display === 'block') ? 'none' : 'block';
+        }
 </script>
+
 </body>
 </html>

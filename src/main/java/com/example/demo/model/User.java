@@ -31,9 +31,21 @@ public class User {
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] image;
+	
+	@Lob
+	@Column(columnDefinition = "MEDIUMBLOB")
+	private byte[] backGroundImage;
 
 	@ManyToMany
 	List<Teams> teams;
+
+	public byte[] getBackGroundImage() {
+		return backGroundImage;
+	}
+
+	public void setBackGroundImage(byte[] backGroundImage) {
+		this.backGroundImage = backGroundImage;
+	}
 
 	public User() {
 		super();
@@ -139,8 +151,14 @@ public class User {
 		return "User [id=" + id + ", email=" + email + ", password=" + password + ", role=" + role + ", fullname="
 				+ fullname + ", phoneNumber=" + phoneNumber + ", salary=" + salary + ", empRole=" + empRole + ", image="
 				+ (image != null ? Arrays.toString(Arrays.copyOf(image, Math.min(image.length, maxLen))) : null)
+				+ ", backGroundImage="
+				+ (backGroundImage != null
+						? Arrays.toString(Arrays.copyOf(backGroundImage, Math.min(backGroundImage.length, maxLen)))
+						: null)
 				+ ", teams=" + (teams != null ? teams.subList(0, Math.min(teams.size(), maxLen)) : null) + "]";
 	}
+
+	
 
 	
 }

@@ -35,6 +35,7 @@ public class BankAccountDetailsController {
 			accountDetails.setUser(user);
 			model.addAttribute("bankAccountDetails", accountDetails);
 		} else {
+			model.addAttribute("user", user);
 			model.addAttribute("bankAccountDetails1", accountDetails);
 			model.addAttribute("message1", "The Employee Bank Details already Added");
 			return "BankAlreadyMessage";

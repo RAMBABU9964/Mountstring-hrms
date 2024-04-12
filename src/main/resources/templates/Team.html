@@ -1,16 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<title>Teams Dashboard</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-   
+<style>
+/* Additional CSS for button styling */
+.but {
+    background-color: #28a745; /* Green color */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+}
+
+/* Button hover effect */
+.but:hover {
+    background-color: #218838; /* Darker green color */
+}
+</style>
 </head>
 <body>
-<h1>Teams Dashboard</h1>
-
-<button class="but"><a href="CreatTeams">Creat New Team</a></button>
-<button class="but"><a href="viewTeams">View All Team</a></button>
-
+<div class="container text-center mt-5">
+    <h1 class="mb-4">Teams</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <button class="but"><a href="CreatTeams" class="text-white">Create New Team</a></button>
+        </div>
+        <div class="col-md-4">
+            <button class="but"><a href="viewTeams" class="text-white">View All Teams</a></button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

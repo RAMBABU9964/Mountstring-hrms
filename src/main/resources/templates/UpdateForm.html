@@ -1,92 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Employee Information</title>
 
-<style type="text/css">
-input {
-	margin-bottom: 10px;
-}
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+    body {
+        background-color: #f8f9fa;
+    }
 
-.submite {
-	height: 35px;
-	width: 70px;
-	font-size: 15px;
-}
+    .container {
+        width: 50%;
+        margin: 50px auto;
+        padding: 30px;
+        border: 3px solid black;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.submite:hover {
-	background-color: green;
-}
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-label {
-	font-size: 20px;
-	margin-bottom: 5px;
-	margin-top: 15px;
-	margin-right: 70px;
-}
+    label {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
 
-.container {
-	width: 350px;
-	height: 450px;
-	border: 3px solid black;
-	border-radius: 7px;
-	box-shadow: 20px;
-	text-align: center;
-	justify-content: center;
-	margin-left: 33%;
-	font-size: 20px;
-}
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
 
-h1 {
-	align-content: center;
-	justify-content: center;
-	margin-left: 30%;
-	margin-top: 10%;
-}
+    .role-label {
+        margin-top: 20px;
+    }
+
+    .submite {
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submite:hover {
+        background-color: #0056b3;
+    }
+
+    .back-btn {
+        margin-top: 20px;
+    }
+    header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
 </style>
 </head>
-
 <body>
-<h1>Update Employee Information</h1>
+ <header>
+        <div>
+            <h1 class="mb-0">Update [[${employee.fullname}]] Information</h1>
+        </div>
+    </header>
+
 <div class="container">
-  
-    <form action="#" th:action="@{/save}" th:object="${employee}" method="post" >
-         
-        
-        <input type="hidden" th:field="*{id}" class="form-control mb-4 col-4"><br><br>
-        
-        <label for="name">Name:</label><br>
-        <input type="text" th:field="*{fullname}" class="form-control mb-4 col-4"><br><br>
-        
-        <label for="email">Email:</label><br>
-        <input type="email" th:field="*{email}" class="form-control mb-4 col-4"><br><br>
-       
-        <label for="email">PhoneNumber:</label><br>
-        <input type="text" th:field="*{phoneNumber}" class="form-control mb-4 col-4"><br><br>
-       
-       
-        <input type="hidden" th:field="*{password}" class="form-control mb-4 col-4">
-       
-        
-        <label>Role : </label><br>
-	     	EMPLOYEE<input type="radio" th:field="*{role}" value="EMPLOYEE" class="form-control mb-4 col-4"/> 
-		   ADMIN<input type="radio" th:field="*{role}" value="ADMIN" class="form-control mb-4 col-4"/>  <br><br>
-        
-        
+     <form action="#" th:action="@{/save}" th:object="${employee}" method="post" >
+        <div class="form-group">
+             <input type="hidden" th:field="*{id}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" th:field="*{fullname}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+              <input type="email" th:field="*{email}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+             <input type="text" th:field="*{phoneNumber}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label class="role-label">Role:</label><br>
+            <div class="form-check form-check-inline">
+                	<input type="radio" th:field="*{role}" value="EMPLOYEE"  id="employeeRadio" class="form-check-input" /> 
+                <label class="form-check-label" for="employeeRadio">Employee</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" th:field="*{role}" value="ADMIN"  id="adminRadio" class="form-check-input" />
+                <label class="form-check-label" for="adminRadio">Admin</label>
+            </div>
+        </div>
         <button type="submit" class="submite">Update</button>
     </form>
-
-    </div>
-    
-    <br><br>
-    <div>
-	<button onclick="goBack()"><span class="symbol" onclick="toggleOptions(this)">&#8592;</span> Back</button>
 </div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
+<div class="back-btn">
+    <button onclick="goBack()" class="btn btn-secondary"><span>&#8592;</span> Back</button>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>

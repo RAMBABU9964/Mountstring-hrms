@@ -4,28 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Bank Details</title>
-    <!-- Include any CSS files or stylesheets if needed -->
-    <link rel="stylesheet" href="path/to/your/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Additional custom styles */
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .card-text {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <header>
+        <div class="container">
+            <h1 class="mb-0">[[${user.fullname}]], Bank Details</h1>
+        </div>
+    </header>
+    <div class="container mt-5">
         <!-- Display message1 if present -->
-        <div th:if="${message1}" class="alert alert-danger" role="alert">
+        <div id="message" th:if="${message1}" class="alert alert-danger" role="alert">
             <p th:text="${message1}"></p>
         </div>
 
-        <h1>Employee Bank Account Details</h1>
+        <h2 class="text-center mb-4">Employee Bank Account Details</h2>
         <!-- Display bank account details here -->
-        <p>Account Number: <span th:text="${bankAccountDetails1.accountNumber}"></span></p>
-        <p>Bank Name: <span th:text="${bankAccountDetails1.bankName}"></span></p>
-        <p>Branch Name: <span th:text="${bankAccountDetails1.branchName}"></span></p>
-        <!-- Add more bank account details here -->
-
-        <!-- Include any additional styling or content as needed -->
+          <div class="card">
+            <div class="card-body">
+                <p class="card-text"><strong>Name:</strong> <span > [[${user.fullname}]]</span></p>
+                <p class="card-text"><strong>Account Number:</strong> <span th:text="${bankAccountDetails1.accountNumber}"></span></p>
+                <p class="card-text"><strong>Bank Name:</strong> <span th:text="${bankAccountDetails1.bankName}"></span></p>
+                <p class="card-text"><strong>Branch Name:</strong> <span th:text="${bankAccountDetails1.branchName}"></span></p>
+                <p class="card-text"><strong>IFSC Code:</strong> <span th:text="${bankAccountDetails1.ifscCode}"></span></p>
+                <p class="card-text"><strong>Account Type:</strong> <span th:text="${bankAccountDetails1.accountType}"></span></p>
+                <p class="card-text"><strong>Aadher Number:</strong> <span th:text="${bankAccountDetails1.aadherNumber}"></span></p>
+                <p class="card-text"><strong>Pan Number:</strong> <span th:text="${bankAccountDetails1.panNumber}"></span></p>
+                <!-- Add more bank account details here -->
+                <a th:href="@{/showFormForUpdateBankDetails/{id}(id=${bankAccountDetails1.id})}" class="btn btn-primary"><i class="fas fa-edit"></i> Update Bank Details</a>
+            </div>
+        </div>
     </div>
-     <a th:href="@{/showFormForUpdateBankDetails/{id}(id=${bankAccountDetails1.id})}" class="btn btn-primary update-option">Update</a>
-       
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        // JavaScript to hide the message after 30 seconds
+        setTimeout(function() {
+            var message = document.getElementById('message');
+            if (message) {
+                message.style.display = 'none';
+            }
+        }, 10000); // 30 seconds in milliseconds
+    </script>
 </body>
 </html>
-
-

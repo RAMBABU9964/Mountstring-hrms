@@ -1,27 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>User Details View Page</title>
-<style>
-        body {
-            align-items: center;
-            justify-content: center;
-            margin-top: 20%;
-            margin-left: 42%;
-            font-size: 25px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: lightsteelblue;
+            color: white;
+            margin: 0;
+            padding: 0;
         }
+
+        .header {
+            background-color: royalblue;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+        
+          
+    .bg-green {
+        background-color: green;
+        color: white;
+    }   
+    .bg-red {
+        background-color: red;
+        color: white;
+    }
+
+        .container {
+            max-width: 600px;
+            text-align:center;
+            margin: 5px auto;
+            padding: 20px;
+            background-color: cornflowerblue;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0.2, 0, 0, 0.4);
+        }
+
+       
+        .employee-image {
+           
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+        }
+        
+         .image-update-container {
+            display: none;
+            text-align: center;
+        }
+        
+       
+        
+       
+
+      .update-symbol{
+      color: royalblue;
+      cursor: pointer;
+      font-size: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: white;
+      padding: 5px;
+      border-radius: 50%;
+      }
+
+      .update-symbol:hover {
+        color: darkblue;
+      }
+
+        /* Add more styles and components for your dashboard here */
     </style>
 </head>
 <body>
- <div>
-	<button onclick="goBack()"><span class="symbol" onclick="toggleOptions(this)">&#8592;</span> Back</button>
-</div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
+
+    <div class="header">
+        <h1>[[${employee.fullname}]]</h1>
+    </div>
+    
+  
+         
+       
+<div class="container">
+
 <div>
 
 <p th:if="${imageBase64 != null}">
@@ -40,15 +108,47 @@
         <p><strong>Email:</strong> [[${employee.email}]]</p>
         <p><strong>PhoneNumber:</strong> [[${employee.phoneNumber}]]</p>
 
-</div>
-
-<button class="but2">
+</div>  
+    
         <span sec:authorize="isAuthenticated">
         <a th:href="@{/logout}">
          Logout
-        </a>
-        </span>
-        </button>
         
+        </a>
+        
+        </span>
+
+    </div>
+    
+    <script>
+    function showMessage(message) {
+        document.getElementById('attendanceMessage').innerHTML = '<p>' + message + '</p>';
+    }
+</script>
+
+<script>
+    function showMessage(message) {
+        var messageElement = document.getElementById('attendanceMessage');
+        messageElement.innerHTML = '<p>' + message + '</p>';
+        
+        // Automatically close the message after 3 seconds
+        setTimeout(function() {
+            messageElement.innerHTML = ''; // Clear the message after 3 seconds
+        }, 3000);
+    }
+</script>
+ <script>
+        function toggleImageUpdate() {
+            var updateImageForm = document.getElementById('updateImageForm');
+            if (updateImageForm.style.display === 'none') {
+                updateImageForm.style.display = 'block';
+            } else {
+                updateImageForm.style.display = 'none';
+            }
+        }
+        
+        
+       
+    </script>
 </body>
 </html>
